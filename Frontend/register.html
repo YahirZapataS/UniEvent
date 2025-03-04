@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - UniEvent</title>
+    <link rel="stylesheet" href="./styles/register.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="module" src="/Backend/firebaseConfig.js"></script>
+    <script type="module" src="/Backend/register.js"></script>
+</head>
+<body>
+    <div id="register-container">
+        <h2>Register as Gestor</h2>
+        <form id="register-form">
+            <input type="email" id="reg-email" placeholder="Email@email.com" required>
+            <input type="password" id="reg-password" placeholder="Password" required>
+            <input type="password" id="confirm-reg-password" placeholder="Confirm Password" required>
+            <label>
+                <input type="checkbox" id="showPassword"> Show Password
+            </label>
+            <button type="submit" id="register-btn">Register</button>
+            <button type="button" id="btn-back">Back to login</button>
+        </form>
+        <p>Already have an account? <a href="login.html">Login here</a></p>
+    </div>
+</body>
+</html>

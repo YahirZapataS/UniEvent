@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - UniEvent</title>
+    <link rel="stylesheet" href="./styles/dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="module" src="/Backend/firebaseConfig.js"></script>
+    <script type="module" src="/Backend/dashboard.js"></script>
+</head>
+<body>
+    <div id="dashboard-container">
+        <nav id="sidebar">
+            <h2>UniEvent</h2>
+            <ul>
+                <li><a href="#" id="view-upcoming">Upcoming</a></li>
+                <li><a href="#" id="view-completed">Completed</a></li>
+                <li><a href="#" id="view-requests">Requests</a></li>
+            </ul>
+        </nav>
+        <main id="main-content">
+            <h2>Dashboard</h2>
+            <div id="content-area">
+                <section id="upcoming-events" class="dashboard-section" style="display: none;">
+                    <h3>Upcoming Events</h3>
+                    <div id="upcoming-list"></div>
+                </section>
+                <section id="completed-events" class="dashboard-section" style="display: none;">
+                    <h3>Completed Events</h3>
+                    <div id="completed-list"></div>
+                </section>
+                <section id="requests" class="dashboard-section" style="display: none;">
+                    <h3>Pending Requests</h3>
+                    <div id="requests-list"></div>
+                </section>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

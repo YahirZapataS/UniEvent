@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Space - UniEvent</title>
+    <link rel="stylesheet" href="./styles/request.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="module" src="/Backend/firebaseConfig.js"></script>
+    <script type="module" src="/Backend/request.js"></script>
+</head>
+<body>
+    <div id="request-container">
+        <h2>Request a Space</h2>
+        <form id="request-form">
+            <select id="degree">
+                <option selected disabled>Select</option>
+                <option value="C.">C.</option>
+                <option value="Dr.">Dr.</option>
+                <option value="Dra.">Dra.</option>
+                <option value="Mtro.">Mtro.</option>
+                <option value="Mtra.">Mtra.</option>
+                <option value="Lic.">Lic.</option>
+                <option value="Ing.">Ing.</option>
+            </select>
+            <input type="text" id="name" placeholder="Your Name" required>
+            <input type="text" id="activity" placeholder="Activity Name" required>
+            <textarea id="description" placeholder="Describe the activity" required></textarea>
+            <input type="date" id="date" required>
+            <select id="space" required>
+                <option value="">Select a Space</option>
+                <option value="Auditorium">Auditorium</option>
+                <option value="Conference Room">Conference Room</option>
+                <option value="Library Hall">Library Hall</option>
+            </select>
+            <input type="time" id="time" required>
+            <input type="text" id="responsible" placeholder="Responsible Person" required>
+            <button type="submit" id="submit-btn">Submit Request</button>
+        </form>
+    </div>
+</body>
+</html>
