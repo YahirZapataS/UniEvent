@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión de Espacios - FCA</title>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.8/dist/sweetalert2.all.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.8/dist/sweetalert2.min.css">
+  <script type="module" src="js/firebaseConfig.js"></script>
+  <link rel="stylesheet" href="./css/indexStyle.css">
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script type="module">
+        (function () {
+            emailjs.init("IyDvp3Qr5cKPcCyWS");
+        })();
+    </script>
+  <script type="module" src="js/solicitudes.js"></script>
+</head>
+
+<body>
+
+  <h1>Solicitar Espacio Académico</h1>
+  <form id="formSolicitud">
+    <select id="tituloPersona">
+      <option value="">Título</option>
+      <option value="Dr.">Dr.</option>
+      <option value="Dra.">Dra.</option>
+      <option value="Mtro.">Mtro.</option>
+      <option value="Mtra.">Mtra.</option>
+      <option value="Lic.">Lic.</option>
+      <option value="C.">C.</option>
+    </select>
+    <input type="text" id="name" placeholder="Nombre del responsable" required><br>
+    <select id="puestoTrabajo">
+      <option value="">Cargo o puesto</option>
+      <option value="Administrativo">Administrativo</option>
+      <option value="Docente">Docente</option>
+      <option value="Estudiante">Estudiante</option>
+    </select> 
+    <select id="activityType" required>
+      <option value="">Tipo de actividad</option>
+      <option value="Conferencia">Conferencia</option>
+      <option value="Taller">Taller</option>
+      <option value="Curso">Curso</option>
+      <option value="Junta">Junta / Reunión</option>
+    </select>
+    <input type="text" id="activityName" placeholder="Titulo de la actividad" required><br>
+    <textarea id="description" placeholder="Descripción (Opcional)"></textarea><br>
+    <input type="date" id="date" required><br>
+    <input type="time" id="startTime" required><br>
+    <input type="time" id="endTime" required><br>
+    <select id="place" required>
+      <option value="">Seleccione una opción</option>
+      <option value="Auditorio">Auditorio C.P.A. Josefine Góngora Espitia</option>
+      <option value="Aula 1">Aula 1</option>
+      <option value="Aula 2">Aula 2</option>
+      <option value="Aula 3">Aula 3</option>
+      <option value="Aula 4">Aula 4</option>
+      <option value="Aula 5">Aula 5</option>
+      <option value="Aula 6">Aula 6</option>
+      <option value="Aula 7">Aula 9</option>
+      <option value="Aula 8">Aula 10</option>
+      <option value="Aula 9">Aula 11</option>
+      <option value="Aula 10">Aula 12</option>
+      <option value="Aula 11">Aula 13</option>
+      <option value="Aula 12">Aula 14</option>
+      <option value="Aula 13">Aula 15</option>
+      <option value="Aula 14">Aula 16</option>
+      <option value="Aula 15">Aula 17</option>
+      <option value="Aula 16">Aula 18</option>
+      <option value="Aula 17">Laboratorio de LIS</option>
+      <option value="Aula 18">Laboratorio de LSCA</option>
+    </select><br>
+    <input type="email" id="email" placeholder="Correo Institucional del Solicitante" required><br>
+    <button type="submit">Enviar Solicitud</button><br> 
+    <button type="button" id="btnBack" onclick="window.location.href = 'index.html'">Regresar</button>
+  </form>
+</body>
+</html>
