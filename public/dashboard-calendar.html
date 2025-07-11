@@ -2,14 +2,20 @@
 <html lang="es">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard Gestor</title>
-  <link rel="stylesheet" href="./css/dashboardStyle.css" />
+  <meta charset="UTF-8">
+  <title>Calendario de Actividades</title>
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script type="module" src="js/firebaseConfig.js"></script>
+  <link rel="stylesheet" href="./css/calendarStyle.css">
+  <script type="module" src="./js/calendar.js"></script>
 </head>
 
 <body>
-  <div class="container">
+
+  <main>
+    <!-- Menú lateral -->
     <aside class="sidebar">
       <h3>Menú</h3>
       <ul>
@@ -17,19 +23,15 @@
         <li><a href="dashboard-calendar.html">📆 Calendario</a></li>
         <li><a href="dashboard-approved.html">📝 Aprobadas</a></li>
         <li><a href="dashboard-declined.html">❌ Rechazadas</a></li>
+        <li><a href="dashboard-finished.html">✅ Concluidas</a></li>
         <li><a href="dashboard-configuration.html">⚙️ Configuración</a></li>
         <li><a href="#" id="cerrarSesion">🚪 Cerrar sesión</a></li>
       </ul>
     </aside>
 
-    <main class="contenido">
-      <h2>Calendario</h2>
-      <!-- Aquí el contenido dinámico de la sección -->
-    </main>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script type="module" src="/js/archivo-correspondiente.js"></script>
+    <!-- Calendario -->
+    <div id="calendar"></div>
+  </main>
 </body>
 
 </html>

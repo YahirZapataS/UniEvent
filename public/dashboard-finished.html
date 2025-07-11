@@ -2,19 +2,19 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel - Gestor</title>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.8/dist/sweetalert2.all.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.8/dist/sweetalert2.min.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Actividades Concluidas</title>
     <link rel="stylesheet" href="./css/dashboardStyle.css">
-    <script type="module" src="./js/dashboard-declined.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="module" src="./js/firebaseConfig.js"></script>
+    <script type="module" src="./js/dashboard-finished.js"></script>
 </head>
 
 <body>
     <div class="container">
         <aside class="sidebar">
-            <h3 id="titleSidebar">Menú</h3>
+            <h3>Menú</h3>
             <ul>
                 <li><a href="dashboard.html">📌 Solicitudes</a></li>
                 <li><a href="dashboard-calendar.html">📆 Calendario</a></li>
@@ -27,18 +27,15 @@
         </aside>
 
         <main class="content" id="principalContent">
-            <h2>Solicitudes rechazadas</h2>
+            <h2>Actividades Concluidas</h2>
             <table id="applicationsTable" border="1">
                 <thead>
                     <tr>
                         <th>Responsable</th>
-                        <th>Tipo de actividad</th>
                         <th>Actividad</th>
-                        <th>Descripción</th>
                         <th>Fecha</th>
-                        <th>Hora de Inicio</th>
+                        <th>Hora</th>
                         <th>Lugar</th>
-                        <th>Estado</th>
                     </tr>
                 </thead>
                 <tbody>

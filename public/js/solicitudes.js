@@ -1,6 +1,6 @@
 
 import { db } from "./firebaseConfig.js";
-import { collection, addDoc, getDoc, doc} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { collection, addDoc, getDoc, query, where, getDocs} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 emailjs.init("IyDvp3Qr5cKPcCyWS");
 
@@ -22,11 +22,47 @@ form.addEventListener("submit", async (e) => {
     // Validation
 
     if(startTime >= endTime) {
-        Swal.fire("La hora de inicio debe ser anterior a la hora de finalización.");
+        Swal.fire("Upss!","La hora de inicio debe ser anterior a la hora de finalización.", "warning");
         return;
     }
 
     try {
+
+        const requestsRef = collection(db, "solicitudes");
+        const toMinutes = (timeStr) => {
+            const [hour, minute] = timeStr.split(":").map(Number);
+            return hour * 60 + minute;
+        };
+
+        const newStart = toMinutes(startTime) - 30;
+        const newEnd = toMinutes(endTime) + 30;
+
+        const q = query (
+            requestsRef,
+            where("date", "==", date),
+            where("place", "==", place),
+            where("state", "in", ["Pendiente", "Aceptada"])
+        );
+
+        const snapshot = await getDocs(q);
+        let conflictFound = false;
+
+        snapshot.forEach(docSnap => {
+            const request = docSnap.data();
+            const start = toMinutes(request.startTime);
+            const end = toMinutes(request.endTime);
+
+            if (!(newEnd <= start || newStart >= end)) {
+                conflictFound = true;
+            }
+        });
+
+        if (conflictFound) {
+            Swal.fire("Conflicto de horario", "Ya existe una actividad registrada en ese espacio cerca de esa hora. Intenta con otro horario o lugar", "warning");
+            return;
+        }
+
+
         const docRef = await addDoc(collection(db, "solicitudes"), {
             name,
             activityType,

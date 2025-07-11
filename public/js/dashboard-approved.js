@@ -13,11 +13,11 @@ onAuthStateChanged(auth, async (user) => {
 
     // Pending requests
     const requestsRef = collection (db, 'solicitudes');
-    const q = query (requestsRef, where("state", "==", "Rechazada"));
+    const q = query (requestsRef, where("state", "==", "Aceptada"));
     const snapshot = await getDocs(q);
 
     if (snapshot.empty) {
-        table.innerHTML = `<tr><td colspan="7">No hay solicitudes rechazadas</td></tr>`;
+        table.innerHTML = `<tr><td colspan="7">No hay solicitudes para mostrar</td></tr>`;
         return;
     }
 
