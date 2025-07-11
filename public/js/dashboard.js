@@ -25,23 +25,23 @@ onAuthStateChanged(auth, async (user) => {
     }
 
     snapshot.forEach((docSnap) => {
-      const data = docSnap.data();
-      const row = document.createElement("tr");
+        const data = docSnap.data();
+        const row = document.createElement("tr");
 
-      row.innerHTML = `
-      <td>${data.name}</td>
-      <td>${data.activity}</td>
-      <td>${data.description}</td>
-      <td>${data.date}</td>
-      <td>${data.startTime}</td>
-      <td>${data.place}</td>
-      <td>${data.guests?.join(", ")}</td>
-      <td>
+        row.innerHTML = `
+        <td>${data.name}</td>
+        <td>${data.activityType}</td>
+        <td>${data.activityName}</td>
+        <td>${data.description}</td>
+        <td>${data.date}</td>
+        <td>${data.startTime}</td>
+        <td>${data.place}</td>
+        <td>
         <button data-id="${docSnap.id}" class="aprobar">✅ Aceptar</button>
         <button data-id="${docSnap.id}" class="rechazar">❌ Rechazar</button>
-      </td>
+        </td>
     `;
-      table.appendChild(row);
+        table.appendChild(row);
     });
 });
 
@@ -75,12 +75,11 @@ document.addEventListener("click", async (e) => {
             await emailjs.send("service_jhvkojp", "template_xja6qwb", {
                 name: data.name,
                 state: newState,
-                activity: data.activity,
+                activity: data.activityName,
                 description: data.description,
                 date: data.date,
                 startTime: data.startTime,
                 place: data.place,
-                guests: data.guests,
                 email: data.email
             });
             Swal.fire("Actualizado", `Solicitud ${newState}`, "success").then(() => location.reload());

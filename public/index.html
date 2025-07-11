@@ -8,6 +8,13 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.8/dist/sweetalert2.all.min.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.8/dist/sweetalert2.min.css">
   <script type="module" src="js/firebaseConfig.js"></script>
+  <link rel="stylesheet" href="./css/indexStyle.css">
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script type="module">
+        (function () {
+            emailjs.init("IyDvp3Qr5cKPcCyWS");
+        })();
+    </script>
   <script type="module" src="js/solicitudes.js"></script>
 </head>
 
@@ -16,7 +23,14 @@
   <h1>Solicitar Espacio Académico</h1>
   <form id="formSolicitud">
     <input type="text" id="name" placeholder="Nombre del responsable" required><br>
-    <input type="text" id="activity" placeholder="Actividad" required><br>
+    <select id="activityType" required>
+      <option value="">Seleccione una opción:</option>
+      <option value="conferencia">Conferencia</option>
+      <option value="taller">Taller</option>
+      <option value="curso">Curso</option>
+      <option value="Junta">Junta / Reunión</option>
+    </select>
+    <input type="text" id="activityName" placeholder="Titulo de la actividad" required><br>
     <textarea id="description" placeholder="Descripción (Opcional)"></textarea><br>
     <input type="date" id="date" required><br>
     <input type="time" id="startTime" required><br>
@@ -43,13 +57,8 @@
       <option value="Aula 17">Laboratorio de LIS</option>
       <option value="Aula 18">Laboratorio de LSCA</option>
     </select><br>
-    <input type="checkbox" name="guests" id="guests" value="Conferencistas"> Conferencistas<br>
-    <input type="checkbox" name="guests" id="guests" value="Grupos comisionados"> Grupos Comisionados<br>
-    <input type="checkbox" name="guests" id="guests" value="Autoridades"> Autoridades<br>
-    <input type="checkbox" name="guests" id="guests" value="Todos"> Todos<br>
     <input type="email" id="email" placeholder="Correo Institucional del Solicitante" required><br>
     <button type="submit">Enviar Solicitud</button>
   </form>
 </body>
-
 </html>
