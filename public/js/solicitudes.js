@@ -9,7 +9,9 @@ const form = document.getElementById("formSolicitud");
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
+    const title = document.getElementById('tituloPersona').value;
     const name = document.getElementById("name").value;
+    const cargo = document.getElementById('puestoTrabajo').value;
     const activityType = document.getElementById("activityType").value;
     const activityName = document.getElementById("activityName").value;
     const description = document.getElementById("description").value;
@@ -64,7 +66,9 @@ form.addEventListener("submit", async (e) => {
 
 
         const docRef = await addDoc(collection(db, "solicitudes"), {
+            title,
             name,
+            cargo,
             activityType,
             activityName,
             description,
@@ -81,6 +85,7 @@ form.addEventListener("submit", async (e) => {
         const requestSnap = await getDoc(docRef);
         const data = requestSnap.data();
         await emailjs.send("service_jhvkojp", "template_547yaif", {
+            title: data.title,
             name: data.name,
             activityType: data.activityType,
             activityName: data.activityName,

@@ -22,12 +22,27 @@
 
   <h1>Solicitar Espacio Académico</h1>
   <form id="formSolicitud">
+    <select id="tituloPersona">
+      <option value="">Título</option>
+      <option value="Dr.">Dr.</option>
+      <option value="Dra.">Dra.</option>
+      <option value="Mtro.">Mtro.</option>
+      <option value="Mtra.">Mtra.</option>
+      <option value="Lic.">Lic.</option>
+      <option value="C.">C.</option>
+    </select>
     <input type="text" id="name" placeholder="Nombre del responsable" required><br>
+    <select id="puestoTrabajo">
+      <option value="">Cargo o puesto</option>
+      <option value="Administrativo">Administrativo</option>
+      <option value="Docente">Docente</option>
+      <option value="Estudiante">Estudiante</option>
+    </select> 
     <select id="activityType" required>
-      <option value="">Seleccione una opción:</option>
-      <option value="conferencia">Conferencia</option>
-      <option value="taller">Taller</option>
-      <option value="curso">Curso</option>
+      <option value="">Tipo de actividad</option>
+      <option value="Conferencia">Conferencia</option>
+      <option value="Taller">Taller</option>
+      <option value="Curso">Curso</option>
       <option value="Junta">Junta / Reunión</option>
     </select>
     <input type="text" id="activityName" placeholder="Titulo de la actividad" required><br>
@@ -58,7 +73,8 @@
       <option value="Aula 18">Laboratorio de LSCA</option>
     </select><br>
     <input type="email" id="email" placeholder="Correo Institucional del Solicitante" required><br>
-    <button type="submit">Enviar Solicitud</button>
+    <button type="submit">Enviar Solicitud</button><br> 
+    <button type="button" id="btnBack" onclick="window.location.href = 'login.html'">Regresar</button>
   </form>
 </body>
 </html>
