@@ -4,11 +4,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - UniEvent</title>
+    <title>Panel - Gestor</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.8/dist/sweetalert2.all.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.8/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="./css/dashboardStyle.css">
+    <script type="module" src="./js/dashboard.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="module">
+        (function () {
+            emailjs.init("IyDvp3Qr5cKPcCyWS");
+        })();
+    </script>
+    <script type="module" src="js/dashboard.js"></script>
 </head>
+
 <body>
-    
+    <div class="container">
+        <aside class="sidebar">
+            <h3 id="titleSidebar">Menú</h3>
+            <ul>
+                <li><a href="dashboard.html">📌 Solicitudes</a></li>
+                <li><a href="dashboard-calendar.html">📆 Calendario</a></li>
+                <li><a href="dashboard-approved.html">📝 Aprobadas</a></li>
+                <li><a href="dashboard-finished.html">✅ Concluidas</a></li>
+                <li><a href="dashboard-configuration.html">⚙️ Configuración</a></li>
+                <li><a href="#" id="cerrarSesion">🚪 Cerrar sesión</a></li>
+            </ul>
+        </aside>
+
+        <main class="content" id="principalContent">
+            <h2>Solicitudes pendientes</h2>
+            <table id="applicationsTable" border="1">
+                <thead>
+                    <tr>
+                        <th>Responsable</th>
+                        <th>Actividad</th>
+                        <th>Descripción</th>
+                        <th>Fecha</th>
+                        <th>Hora de Inicio</th>
+                        <th>Lugar</th>
+                        <th>Invitados / Asistentes</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </main>
+    </div>
 </body>
+
 </html>
