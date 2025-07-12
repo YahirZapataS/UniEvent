@@ -2,7 +2,6 @@
 import { db } from "./firebaseConfig.js";
 import { collection, addDoc, getDoc, query, where, getDocs} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-emailjs.init("IyDvp3Qr5cKPcCyWS");
 
 const form = document.getElementById("formSolicitud");
 
@@ -65,7 +64,7 @@ form.addEventListener("submit", async (e) => {
         }
 
 
-        const docRef = await addDoc(collection(db, "solicitudes"), {
+        await addDoc(collection(db, "solicitudes"), {
             title,
             name,
             cargo,
@@ -81,21 +80,7 @@ form.addEventListener("submit", async (e) => {
             registerDate: new Date().toISOString()
         });
 
-
-        const requestSnap = await getDoc(docRef);
-        const data = requestSnap.data();
-        await emailjs.send("service_jhvkojp", "template_547yaif", {
-            title: data.title,
-            name: data.name,
-            activityType: data.activityType,
-            activityName: data.activityName,
-            date: data.date,
-            startTime: data.startTime,
-            place: data.place,
-            email: data.email
-        });
-
-        Swal.fire('¡Enviado!', 'Será notificado el estado de su solicitud al correo ingresado', 'success');
+        Swal.fire('¡Enviado!', 'Su solicitud ha sido registrada correctamente.', 'success');
         form.reset();
     } catch (error) {
         console.error("Error al guardar", error);
