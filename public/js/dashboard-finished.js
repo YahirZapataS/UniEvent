@@ -8,7 +8,7 @@ import {
 
 const table = document.querySelector('#applicationsTable tbody');
 
-// Validar sesión
+// Validar sesión y mostrar actividades concluidas
 onAuthStateChanged(auth, async (user) => {
     if (!user) {
         window.location.href = 'login.html';
@@ -19,27 +19,27 @@ onAuthStateChanged(auth, async (user) => {
     const snapshot = await getDocs(q);
 
     const now = new Date();
+    let hasFinishedActivities = false;
 
-    let count = 0;
     snapshot.forEach(doc => {
         const data = doc.data();
-        const fullDate = new Date(`${data.date}T${data.startTime}`);
+        const activityDateTime = new Date(`${data.date}T${data.endTime}`); // Usar endTime para una validación más precisa
 
-        if (fullDate < now) {
+        if (activityDateTime < now) {
             const row = document.createElement("tr");
             row.innerHTML = `
-        <td>${data.name}</td>
-        <td>${data.activityName}</td>
-        <td>${data.date}</td>
-        <td>${data.startTime}</td>
-        <td>${data.place}</td>
-        `;
+                <td>${data.name}</td>
+                <td>${data.activityName}</td>
+                <td>${data.date}</td>
+                <td>${data.startTime}</td>
+                <td>${data.place}</td>
+            `;
             table.appendChild(row);
-            count++;
+            hasFinishedActivities = true;
         }
     });
 
-    if (count === 0) {
+    if (!hasFinishedActivities) {
         table.innerHTML = `<tr><td colspan="5">No hay actividades concluidas</td></tr>`;
     }
 });

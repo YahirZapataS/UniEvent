@@ -1,4 +1,3 @@
-
 import { auth } from './firebaseConfig.js';
 import { signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
 
@@ -11,27 +10,41 @@ form.addEventListener("submit", async (e) => {
     const password = document.getElementById('password').value.trim();
 
     if (!email || !password) {
-        showAlert('Error', 'Completa los campos solicitados para iniciar sesión', 'warning');
+        Swal.fire('Error', 'Completa los campos solicitados para iniciar sesión', 'warning');
+        return;
     }
 
     try {
-        const credentials = await signInWithEmailAndPassword(auth, email, password);
-        const user = credentials.user;
+        await signInWithEmailAndPassword(auth, email, password);
 
-        Swal.fire ({
+        Swal.fire({
             icon: 'success',
             title: 'Bienvenido',
             text: 'Acceso concedido',
             timer: 1500,
             showConfirmButton: false
-        }).then(() => {
+        });
+        
+        // Redirige después de que el SweetAlert se haya cerrado
+        setTimeout(() => {
             window.location.href = "dashboard.html";
-        })
+        }, 1500);
+
     } catch (error) {
-        console.error("Error de login: ", error);
-        let message = 'Correo o constraseña incorrectos';
-        if (error.code === "auth/user-not-found") message = "Usuario no registrado.";
-        if (error.code === "auth/wrong-password") message = "Contraseña incorrecta";
-        Swal.fire ("Error", message, "error");
+        let message = 'Correo o contraseña incorrectos';
+        switch (error.code) {
+            case "auth/user-not-found":
+                message = "Usuario no registrado.";
+                break;
+            case "auth/wrong-password":
+                message = "Contraseña incorrecta.";
+                break;
+            case "auth/invalid-email":
+                message = "El formato del correo electrónico no es válido.";
+                break;
+            default:
+                break;
+        }
+        Swal.fire("Error", message, "error");
     }
 });

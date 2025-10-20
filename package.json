@@ -1,5 +1,28 @@
 {
   "dependencies": {
+    "@mailerlite/mailerlite-nodejs": "^1.5.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "node-fetch": "^3.3.2",
     "sweetalert2": "^11.22.2"
-  }
+  },
+  "name": "unievent",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YahirZapataS/UniEvent.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/YahirZapataS/UniEvent/issues"
+  },
+  "homepage": "https://github.com/YahirZapataS/UniEvent#readme"
 }

@@ -10,7 +10,7 @@ const btnClose = document.getElementById('cerrarSesion');
 // Validate auth
 onAuthStateChanged(auth, async (user) => {
     if (!user) {
-        window.location.href = 'login.html';
+        window.location.href = 'index.html';
         return;
     }
 
@@ -37,8 +37,8 @@ onAuthStateChanged(auth, async (user) => {
         <td>${data.startTime}</td>
         <td>${data.place}</td>
         <td>
-        <button data-id="${docSnap.id}" class="aprobar">✅ Aceptar</button>
-        <button data-id="${docSnap.id}" class="rechazar">❌ Rechazar</button>
+        <button data-id="${docSnap.id}" class="aprobar">Aceptar</button>
+        <button data-id="${docSnap.id}" class="rechazar">Rechazar</button>
         </td>
     `;
         table.appendChild(row);
@@ -92,5 +92,5 @@ document.addEventListener("click", async (e) => {
 
 btnClose.addEventListener("click", async () => {
     await signOut(auth);
-    window.location.href = "login.html";
+    window.location.href = "index.html";
 });
