@@ -1,5 +1,5 @@
 import { db, auth } from './firebaseConfig.js';
-import { collection, getDocs, getDoc, updateDoc, doc, query, where} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { collection, getDocs, getDoc, updateDoc, doc, query, where, orderBy} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 emailjs.init("IyDvp3Qr5cKPcCyWS");
@@ -16,7 +16,12 @@ onAuthStateChanged(auth, async (user) => {
 
     // Pending requests
     const requestsRef = collection (db, 'solicitudes');
-    const q = query (requestsRef, where("state", "==", "Pendiente"));
+    const q = query (
+    requestsRef, 
+    where("state", "==", "Pendiente"),
+    orderBy('registerDate', 'desc'),
+    orderBy('startTime', 'asc')
+);
     const snapshot = await getDocs(q);
 
     if (snapshot.empty) {
@@ -73,6 +78,7 @@ document.addEventListener("click", async (e) => {
             await updateDoc(requestRef, { state: newState });
             const data = requestSnap.data();
             await emailjs.send("service_jhvkojp", "template_xja6qwb", {
+                title: data.title,
                 name: data.name,
                 state: newState,
                 activity: data.activityName,

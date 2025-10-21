@@ -123,6 +123,15 @@ placeInput.addEventListener('change', async () => {
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
+    Swal.fire({
+        title: 'Enviando Solicitud...',
+        html: 'Por favor espera mientras verificamos y registramos tu petición.',
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+
     // Recolección de datos
     const title = document.getElementById('tituloPersona').value;
     const name = document.getElementById("name").value;
@@ -140,24 +149,26 @@ form.addEventListener("submit", async (e) => {
         const [hour, minute] = timeStr.split(":").map(Number);
         return hour * 60 + minute;
     };
-    
+
     const newStart = toMinutes(startTime);
     const newEnd = toMinutes(endTime);
     const MIN_TIME_MINUTES = 480;
     const MAX_TIME_MINUTES = 1260;
 
-    if (newStart < MIN_TIME_MINUTES || newEnd > MAX_TIME_MINUTES) {
-        Swal.fire("Límite de horario", "Solo se permite apartar espacios entre las 8:00 AM y las 9:00 PM.", "warning");
-        return;
-    }
-    
-    if (newStart >= newEnd) {
-        Swal.fire("Upss!", "La hora de inicio debe ser anterior a la hora de finalización.", "warning");
+    if (newStart < MIN_TIME_MINUTES || newEnd > MAX_TIME_MINUTES || newStart >= newEnd) {
+        Swal.close();
+        if (newStart < MIN_TIME_MINUTES || newEnd > MAX_TIME_MINUTES) {
+            Swal.fire("Límite de horario", "Solo se permite apartar espacios entre las 8:00 AM y las 9:00 PM.", "warning");
+        } else {
+            Swal.fire("Upss!", "La hora de inicio debe ser anterior a la hora de finalización.", "warning");
+        }
         return;
     }
 
     try {
         const requestsRef = collection(db, "solicitudes");
+
+        // Verificación de Conflicto (omito la lógica aquí por brevedad, pero se mantiene la verificación)
         const q = query(
             requestsRef,
             where("date", "==", date),
@@ -179,46 +190,45 @@ form.addEventListener("submit", async (e) => {
             return;
         }
 
-        // 1. Guardar solicitud en Firestore
+        // 2. Guardar solicitud en Firestore (usando new Date() para Timestamp)
         await addDoc(collection(db, "solicitudes"), {
             title, name, cargo, activityType, activityName, description,
             date, startTime, endTime, place, email,
             state: "Pendiente",
-            registerDate: new Date().toISOString()
+            registerDate: new Date() // Guardar como Timestamp
         });
-        
-        // Envío de correo al gestor
+
+        // 3. Envío de correo al GESTOR
         try {
             const templateParams = {
                 to_email: ADMIN_EMAIL,
-                responsible_name: `${title} ${name}`, 
-                activity_title: activityName,
-                activity_type: activityType, 
-                request_date: date,
-                request_time: `${startTime} - ${endTime}`, 
-                request_place: place,
-                description: description, 
-                applicant_email: email
+                responsible_name: `${title} ${name}`, activity_title: activityName,
+                activity_type: activityType, request_date: date,
+                request_time: `${startTime} - ${endTime}`, request_place: place,
+                description: description, applicant_email: email
             };
-            
-            // Correo notificación
             await emailjs.send(EMAILJS_SERVICE_ID_NEW, EMAILJS_TEMPLATE_ID_NEW, templateParams);
-            console.log("Notificación al administrador enviada con éxito.");
-        
         } catch (emailError) {
             console.error("Error al enviar el correo con EmailJS al gestor:", emailError);
         }
-        
-        // Corregir la disponibilidad después del envío
+
+        // 4. Corregir la disponibilidad (si todo fue exitoso)
         availabilityCache.clear();
-        await preloadMonthAvailability(new Date(date), place); 
+        await preloadMonthAvailability(new Date(date), place);
         fp.redraw();
 
-        Swal.fire('¡Enviado!', 'Su solicitud ha sido registrada correctamente. Te notificaremos cuando sea aprobada.', 'success');
-        form.reset();
+        Swal.fire('¡Enviado!', 'Su solicitud ha sido registrada correctamente. Te notificaremos cuando sea aprobada.', 'success')
+            .then((result) => {
+                if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
+                    window.location.href = "index.html";
+                }
+            });
 
     } catch (error) {
+        // En caso de error de Firebase o red
         console.error("Error al guardar:", error);
         Swal.fire('Error', 'Hubo un problema al enviar tu solicitud. Inténtalo de nuevo más tarde.', 'error');
+
+    } finally {
     }
 });
