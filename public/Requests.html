@@ -13,6 +13,9 @@
     </script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.8/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="css/requestsStyle.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
 </head>
 
 <body>
@@ -80,18 +83,6 @@
                 <div class="form-section">
                     <h2>Fecha y Lugar</h2>
                     <div class="input-group">
-                        <label for="date">Fecha</label>
-                        <input type="date" id="date" required>
-                    </div>
-                    <div class="input-group">
-                        <label for="startTime">Hora de inicio</label>
-                        <input type="time" id="startTime" required>
-                    </div>
-                    <div class="input-group">
-                        <label for="endTime">Hora de finalización</label>
-                        <input type="time" id="endTime" required>
-                    </div>
-                    <div class="input-group">
                         <label for="place">Espacio Deseado</label>
                         <select id="place" required>
                             <option value="">Seleccione una opción</option>
@@ -115,6 +106,18 @@
                             <option value="Aula 17">Laboratorio de LIS</option>
                             <option value="Aula 18">Laboratorio de LSCA</option>
                         </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="date">Fecha</label>
+                        <input type="text" id="date" placeholder="Seleccionar Fecha" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="startTime">Hora de inicio</label>
+                        <input type="time" id="startTime" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="endTime">Hora de finalización</label>
+                        <input type="time" id="endTime" required>
                     </div>
                 </div>
 

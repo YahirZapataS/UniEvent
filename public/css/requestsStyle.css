@@ -128,3 +128,39 @@ button[type="button"]:hover {
         flex-direction: column;
     }
 }
+
+/* Estilos para Flatpickr y Colores de Disponibilidad */
+
+/* Rojo: Muy ocupado / Lleno */
+.flatpickr-day.availability-red:not(.today) {
+    background-color: #ffdddd !important; 
+    border-color: #ff9999 !important;
+    color: #cc0000 !important;
+    font-weight: bold;
+}
+
+/* Amarillo: Disponibilidad Limitada */
+.flatpickr-day.availability-yellow:not(.today) {
+    background-color: #fffacd !important; 
+    border-color: #ffe08a !important;
+    color: #aa8400 !important;
+}
+
+/* Verde: Disponible */
+.flatpickr-day.availability-green:not(.today) {
+    background-color: #ddffdd !important; 
+    border-color: #99ff99 !important;
+    color: #008000 !important;
+}
+
+/* Opcional: Estilo para un día sin datos (gris) */
+.flatpickr-day.availability-gray:not(.today) {
+    color: #aaaaaa;
+}
+
+/* Asegurar que el día seleccionado mantenga su estilo */
+.flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange {
+    background-color: #007bff !important; 
+    border-color: #007bff !important;
+    color: white !important;
+}
