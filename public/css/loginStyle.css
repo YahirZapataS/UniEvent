@@ -125,13 +125,14 @@ input[type="password"]:focus {
     margin-top: 10px;
 }
 
+/* Responsive Design */
 @media (max-width: 768px) {
     .login-container {
         flex-direction: column;
     }
 
     .login-left {
-        display: none; /* Oculta la imagen en móviles para ahorrar espacio */
+        display: none;
     }
 
     .login-right {

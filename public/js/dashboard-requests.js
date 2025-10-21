@@ -43,7 +43,6 @@ onAuthStateChanged(auth, async (user) => {
 
     const currentPath = window.location.pathname;
     
-    // Obtener el estado basado en el nombre del archivo
     if (currentPath.includes("dashboard-approved.html")) {
         loadRequestsByStatus("Aceptada");
     } else if (currentPath.includes("dashboard-declined.html")) {

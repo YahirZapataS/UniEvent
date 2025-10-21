@@ -143,7 +143,7 @@ form.addEventListener("submit", async (e) => {
     const startTime = startTimeInput.value;
     const endTime = endTimeInput.value;
     const place = placeInput.value;
-    const email = document.getElementById("email").value; // Correo del solicitante
+    const email = document.getElementById("email").value;
 
     const toMinutes = (timeStr) => {
         const [hour, minute] = timeStr.split(":").map(Number);
@@ -167,8 +167,6 @@ form.addEventListener("submit", async (e) => {
 
     try {
         const requestsRef = collection(db, "solicitudes");
-
-        // Verificación de Conflicto (omito la lógica aquí por brevedad, pero se mantiene la verificación)
         const q = query(
             requestsRef,
             where("date", "==", date),
@@ -190,15 +188,13 @@ form.addEventListener("submit", async (e) => {
             return;
         }
 
-        // 2. Guardar solicitud en Firestore (usando new Date() para Timestamp)
         await addDoc(collection(db, "solicitudes"), {
             title, name, cargo, activityType, activityName, description,
             date, startTime, endTime, place, email,
             state: "Pendiente",
-            registerDate: new Date() // Guardar como Timestamp
+            registerDate: new Date()
         });
 
-        // 3. Envío de correo al GESTOR
         try {
             const templateParams = {
                 to_email: ADMIN_EMAIL,
@@ -212,7 +208,6 @@ form.addEventListener("submit", async (e) => {
             console.error("Error al enviar el correo con EmailJS al gestor:", emailError);
         }
 
-        // 4. Corregir la disponibilidad (si todo fue exitoso)
         availabilityCache.clear();
         await preloadMonthAvailability(new Date(date), place);
         fp.redraw();
@@ -225,7 +220,6 @@ form.addEventListener("submit", async (e) => {
             });
 
     } catch (error) {
-        // En caso de error de Firebase o red
         console.error("Error al guardar:", error);
         Swal.fire('Error', 'Hubo un problema al enviar tu solicitud. Inténtalo de nuevo más tarde.', 'error');
 

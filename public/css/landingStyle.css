@@ -99,13 +99,11 @@ body {
     margin-top: 20px;
 }
 
-/* Secciones generales */
 section {
     padding: 80px 5%;
     text-align: center;
 }
 
-/* Sección Hero (Principal) */
 .hero {
     background-color: #e9ecef;
     display: flex;
@@ -137,7 +135,6 @@ section {
     margin-bottom: 30px;
 }
 
-/* Sección de Características */
 .features {
     background-color: var(--text-light);
 }
@@ -173,7 +170,6 @@ section {
     margin-bottom: 15px;
 }
 
-/* Sección de Llamada a la Acción */
 .call-to-action {
     background-color: var(--primary-color);
     color: var(--text-light);
@@ -198,7 +194,6 @@ section {
     background-color: #cccccc;
 }
 
-/* Footer */
 .footer {
     background-color: var(--text-dark);
     color: #adb5bd;
@@ -207,7 +202,7 @@ section {
     font-size: 0.9em;
 }
 
-/* Responsividad */
+/* Responsive Design */
 @media (max-width: 768px) {
     .header {
         flex-direction: column;

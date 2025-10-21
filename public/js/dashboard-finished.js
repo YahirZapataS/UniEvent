@@ -44,7 +44,6 @@ onAuthStateChanged(auth, async (user) => {
     }
 });
 
-// Logout
 document.getElementById("cerrarSesion").addEventListener("click", async () => {
     await signOut(auth);
     window.location.href = "login.html";

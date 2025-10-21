@@ -25,7 +25,6 @@ form.addEventListener("submit", async (e) => {
             showConfirmButton: false
         });
         
-        // Redirige después de que el SweetAlert se haya cerrado
         setTimeout(() => {
             window.location.href = "dashboard.html";
         }, 1500);
