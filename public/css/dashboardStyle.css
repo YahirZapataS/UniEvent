@@ -185,3 +185,64 @@ tbody tr:hover {
     background-color: #0056b3;
     transform: scale(1.05);
 }
+    
+.content {
+    flex-grow: 1;
+    padding: 20px 40px;
+}
+
+.config-section {
+    background-color: #ffffff;
+    padding: 20px;
+    margin-bottom: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.config-section h3 {
+    color: #5a67d8;
+    margin-top: 0;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.config-section p {
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.input-group-config label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #4a5568;
+}
+
+.input-group-config input[type="email"],
+.input-group-config select {
+    width: 100%;
+    max-width: 400px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+.btn-save {
+    background-color: #48bb78;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+}
+
+.btn-save:hover {
+    background-color: #38a169;
+}

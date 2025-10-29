@@ -38,7 +38,7 @@ onAuthStateChanged(auth, async (user) => {
         <td>${data.activityName}</td>
         <td>${data.description}</td>
         <td>${data.date}</td>
-        <td>${data.startTime}</td>
+        <td>${data.startTime} - ${data.endTime}</td>
         <td>${data.place}</td>
         <td>
         <button data-id="${docSnap.id}" class="aprobar">Aceptar</button>
@@ -55,7 +55,7 @@ document.addEventListener("click", async (e) => {
         const newState = e.target.classList.contains("aprobar") ? "Aceptada" : "Rechazada";
 
         const confirm = await Swal.fire({
-            title: `¿Deseas ${newState} esta solicitud?`,
+            title: `¿Deseas marcar como ${newState} esta solicitud?`,
             icon: 'question',
             showCancelButton: true,
             confirmButtonText: 'Sí',
