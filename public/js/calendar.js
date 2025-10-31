@@ -2,21 +2,19 @@ import { db, auth } from "./firebaseConfig.js";
 import { collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-// Botón cerrar sesión
 const btnClose = document.getElementById("cerrarSesion");
 btnClose.addEventListener("click", async () => {
     await signOut(auth);
     window.location.href = "login.html";
 });
 
-// Validar sesión
 onAuthStateChanged(auth, async (user) => {
     if (!user) {
         window.location.href = "login.html";
         return;
     }
 
-    // Cargar actividades aceptadas
+    
     const calendarEl = document.getElementById("calendar");
     const q = query(
         collection(db, "solicitudes"),

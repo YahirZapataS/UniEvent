@@ -28,7 +28,7 @@
                 <div class="form-section">
                     <h2>Datos del Solicitante</h2>
                     <div class="input-group">
-                        <label for="tituloPersona">Título</label>
+                        <label for="tituloPersona">Título (Se refiere al grado profesional o académico)</label>
                         <select id="tituloPersona">
                             <option value="">Seleccione</option>
                             <option value="Dr.">Dr.</option>
@@ -44,7 +44,7 @@
                         <input type="text" id="name" required>
                     </div>
                     <div class="input-group">
-                        <label for="puestoTrabajo">Cargo o puesto</label>
+                        <label for="puestoTrabajo">Cargo o puesto (Se refiere a tu rol en la Institución)</label>
                         <select id="puestoTrabajo">
                             <option value="">Seleccione</option>
                             <option value="Administrativo">Administrativo</option>
@@ -54,7 +54,7 @@
                     </div>
                     <div class="input-group">
                         <label for="email">Correo Institucional</label>
-                        <input type="email" id="email" required>
+                        <input type="email" id="email" required placeholder="example@estudiantes.uv.mx / @uv.mx">
                     </div>
                 </div>
 
@@ -73,11 +73,13 @@
                     </div>
                     <div class="input-group">
                         <label for="activityName">Título de la actividad</label>
-                        <input type="text" id="activityName" required>
+                        <input type="text" id="activityName" required
+                            placeholder="Ej. La contabilidad y sus antecedentes">
                     </div>
                     <div class="input-group">
                         <label for="description">Descripción (Opcional)</label>
-                        <textarea id="description"></textarea>
+                        <textarea id="description"
+                            placeholder="Descripción corta del tema que aborda tu actividad"></textarea>
                     </div>
                 </div>
 
@@ -87,7 +89,7 @@
                         <label for="place">Espacio Deseado</label>
                         <select id="place" required>
                             <option value="">Seleccione una opción</option>
-                            <option value="Auditorio">Auditorio C.P.A. Josefine Góngora Espitia</option>
+                            <option value="Auditorio">Auditorio C.P.A. Josefina Góngora Espitia</option>
                             <option value="Aula 1">Aula 1</option>
                             <option value="Aula 2">Aula 2</option>
                             <option value="Aula 3">Aula 3</option>
@@ -109,7 +111,11 @@
                         </select>
                     </div>
                     <div class="input-group">
-                        <label for="date">Fecha</label>
+                        <div class="label-container">
+                            <label for="date">Fecha</label>
+                            <button type="button" id="nomenclaturaBtn" class="info-btn"
+                                aria-label="Mostrar nomenclatura de colores">?</button>
+                        </div>
                         <input type="text" id="date" placeholder="Seleccionar Fecha" required>
                     </div>
                     <div class="input-group">
@@ -119,6 +125,12 @@
                     <div class="input-group">
                         <label for="endTime">Hora de finalización</label>
                         <input type="time" id="endTime" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="comments">Comentarios adicionales (Opcional)</label>
+                        <textarea id="comments"
+                            placeholder="¿Requieres añadir instrucciones extras?"></textarea>
                     </div>
                 </div>
 

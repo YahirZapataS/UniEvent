@@ -120,6 +120,36 @@ placeInput.addEventListener('change', async () => {
     }
 });
 
+const nomenclaturaBtn = document.getElementById('nomenclaturaBtn');
+
+if (nomenclaturaBtn) {
+    nomenclaturaBtn.addEventListener('click', () => {
+        Swal.fire({
+            title: '<strong>Nomenclatura de Colores</strong>',
+            icon: 'info',
+            html: `
+                    <p style="text-align: left;">Los colores indican la disponibilidad general del <b>lugar seleccionado</b> para ese día:</p>
+                    <ul style="text-align: left; margin-top: 15px; list-style-position: inside;">
+                        <li style="margin-bottom: 8px;">
+                            <span style="color:#008000; font-weight: bold;">Verde:</span> Día disponible.
+                        </li>
+                        <li style="margin-bottom: 8px;">
+                            <span style="color:#aa8400; font-weight: bold;">Amarillo:</span> Disponibilidad limitada.
+                        </li>
+                        <li style="margin-bottom: 8px;">
+                            <span style="color:#cc0000; font-weight: bold;">Rojo:</span> Día muy ocupado.
+                        </li>
+                    </ul>
+                    <hr>
+                    <p style="text-align: left; font-style: italic;">
+                        Por favor, <b>selecciona un lugar primero</b>. La disponibilidad del horario exacto se revisará al enviar la solicitud.
+                    </p>
+                `,
+            confirmButtonText: 'Entendido'
+        });
+    });
+}
+
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -144,6 +174,7 @@ form.addEventListener("submit", async (e) => {
     const endTime = endTimeInput.value;
     const place = placeInput.value;
     const email = document.getElementById("email").value;
+    const comments = document.getElementById("comments").value;
 
     const toMinutes = (timeStr) => {
         const [hour, minute] = timeStr.split(":").map(Number);
@@ -158,7 +189,7 @@ form.addEventListener("submit", async (e) => {
     if (newStart < MIN_TIME_MINUTES || newEnd > MAX_TIME_MINUTES || newStart >= newEnd) {
         Swal.close();
         if (newStart < MIN_TIME_MINUTES || newEnd > MAX_TIME_MINUTES) {
-            Swal.fire("Límite de horario", "Solo se permite apartar espacios entre las 8:00 AM y las 9:00 PM.", "warning");
+            Swal.fire("Límite de horario", "Solo se permite apartar espacios entre las 8:00 AM y las 8:00 PM.", "warning");
         } else {
             Swal.fire("Upss!", "La hora de inicio debe ser anterior a la hora de finalización.", "warning");
         }
@@ -190,8 +221,8 @@ form.addEventListener("submit", async (e) => {
 
         await addDoc(collection(db, "solicitudes"), {
             title, name, cargo, activityType, activityName, description,
-            date, startTime, endTime, place, email,
-            state: "Pendiente",
+            date, startTime, endTime, place, email, comments,
+            state: "Pendiente", reminderSent: false,
             registerDate: new Date()
         });
 

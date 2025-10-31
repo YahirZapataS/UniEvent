@@ -1,14 +1,9 @@
 import { db, auth } from './firebaseConfig.js';
-import {
-    collection, query, where, getDocs
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import {
-    onAuthStateChanged, signOut
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const table = document.querySelector('#applicationsTable tbody');
 
-// Validar sesión y mostrar actividades concluidas
 onAuthStateChanged(auth, async (user) => {
     if (!user) {
         window.location.href = 'login.html';
@@ -23,8 +18,7 @@ onAuthStateChanged(auth, async (user) => {
 
     snapshot.forEach(doc => {
         const data = doc.data();
-        const activityDateTime = new Date(`${data.date}T${data.endTime}`); // Usar endTime para una validación más precisa
-
+        const activityDateTime = new Date(`${data.date}T${data.endTime}`);
         if (activityDateTime < now) {
             const row = document.createElement("tr");
             row.innerHTML = `

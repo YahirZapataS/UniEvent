@@ -51,6 +51,20 @@ label {
     color: #4a5568;
 }
 
+.label-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+    justify-content: flex-start;
+}
+
+.label-container label {
+    margin-bottom: 0;
+    flex-shrink: 0;
+    width: auto;
+    flex-grow: 0;
+}
+
 input[type="text"],
 input[type="email"],
 input[type="date"],
@@ -116,6 +130,31 @@ button[type="button"] {
 
 button[type="button"]:hover {
     background-color: #cbd5e0;
+}
+
+.info-btn {
+    width: 22px !important;
+    height: 22px;
+    max-width: 22px !important;
+    min-width: 22px !important;
+    margin-left: 8px; 
+    border-radius: 50%; 
+    border: 1px solid #5a67d8; 
+    background-color: #f0f2f5; 
+    color: #5a67d8; 
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 !important;
+    line-height: 1;
+    transition: background-color 0.3s;
+}
+
+.info-btn:hover {
+    background-color: #e2e8f0;
 }
 
 /* Responsive design */

@@ -38,7 +38,8 @@ onAuthStateChanged(auth, async (user) => {
         <td>${data.activityName}</td>
         <td>${data.description}</td>
         <td>${data.date}</td>
-        <td>${data.startTime} - ${data.endTime}</td>
+        <td>${data.startTime}</td>
+        <td>${data.endTime}</td>
         <td>${data.place}</td>
         <td>
         <button data-id="${docSnap.id}" class="aprobar">Aceptar</button>
@@ -73,6 +74,10 @@ document.addEventListener("click", async (e) => {
             }
 
             await updateDoc(requestRef, { state: newState });
+            if (newState === "Aceptada") {
+                updateDoc.reminderSent = false;
+            }
+
             const data = requestSnap.data();
             await emailjs.send("service_jhvkojp", "template_xja6qwb", {
                 title: data.title,
@@ -94,18 +99,46 @@ document.addEventListener("click", async (e) => {
 });
 
 btnAdd.addEventListener('click', async () => {
+
     const { value: formValues } = await Swal.fire({
         title: 'Crear Evento Directo',
         html:
+            '<p class="swal-text">Este evento se registrará inmediatamente como <b>Aceptado</b>.</p>' +
             '<input id="swal-title" class="swal2-input" placeholder="Nombre de la Actividad" required>' +
-            '<input id="swal-type" class="swal2-input" placeholder="Tipo de Actividad (ej: Clase)" required>' +
-            '<input id="swal-description" class="swal2-input" placeholder="Descripción breve" required>' +
+            '<select id="swal-type" class="swal2-select" required>' +
+            '<option value="">Seleccione Tipo de Actividad</option>' +
+            '<option value="Conferencia">Conferencia</option>' +
+            '<option value="Taller">Taller</option>' +
+            '<option value="Curso">Curso</option>' +
+            '<option value="Junta">Junta / Reunión</option>' +
+            '</select>' +
+            '<input id="swal-description" class="swal2-input" placeholder="Descripción breve (Opcional)">' +
             '<input id="swal-date" class="swal2-input" type="date" placeholder="Fecha (YYYY-MM-DD)" required>' +
             '<input id="swal-start" class="swal2-input" type="time" placeholder="Hora de Inicio (HH:MM)" required>' +
             '<input id="swal-end" class="swal2-input" type="time" placeholder="Hora de Fin (HH:MM)" required>' +
-            '<input id="swal-place" class="swal2-input" placeholder="Lugar/Aula (ej: Aula 5)" required>',
+            '<select id="swal-place" class="swal2-select" required>' +
+            '<option value="">Seleccione un espacio</option>' +
+            '<option value="Auditorio">Auditorio C.P.A. Josefine Góngora Espitia</option>' +
+            '<option value="Aula 1">Aula 1</option>' +
+            '<option value="Aula 2">Aula 2</option>' +
+            '<option value="Aula 3">Aula 3</option>' +
+            '<option value="Aula 4">Aula 4</option>' +
+            '<option value="Aula 5">Aula 5</option>' +
+            '<option value="Aula 6">Aula 6</option>' +
+            '<option value="Aula 7">Aula 9</option>' +
+            '<option value="Aula 8">Aula 10</option>' +
+            '<option value="Aula 9">Aula 11</option>' +
+            '<option value="Aula 10">Aula 12</option>' +
+            '<option value="Aula 11">Aula 13</option>' +
+            '<option value="Aula 12">Aula 14</option>' +
+            '<option value="Aula 13">Aula 15</option>' +
+            '<option value="Aula 14">Aula 16</option>' +
+            '<option value="Aula 15">Aula 17</option>' +
+            '<option value="Aula 16">Aula 18</option>' +
+            '<option value="Aula 17">Laboratorio de LIS</option>' +
+            '<option value="Aula 18">Laboratorio de LSCA</option>' +
+            '</select>',
 
-        focusConfirm: false,
         preConfirm: () => {
             const activityName = document.getElementById('swal-title').value;
             const activityType = document.getElementById('swal-type').value;
@@ -114,9 +147,9 @@ btnAdd.addEventListener('click', async () => {
             const startTime = document.getElementById('swal-start').value;
             const endTime = document.getElementById('swal-end').value;
             const place = document.getElementById('swal-place').value;
-
-            if (!activityName || !date || !startTime || !endTime || !place) {
-                Swal.showValidationMessage('Por favor, completa todos los campos.');
+            
+            if (!activityName || !activityType || !date || !startTime || !endTime || !place) {
+                Swal.showValidationMessage('Por favor, completa todos los campos requeridos.');
                 return false;
             }
             if (startTime >= endTime) {
@@ -127,7 +160,6 @@ btnAdd.addEventListener('click', async () => {
             return { activityName, activityType, description, date, startTime, endTime, place };
         }
     });
-
     if (formValues) {
         Swal.fire({
             title: 'Registrando Evento...',
@@ -149,15 +181,16 @@ btnAdd.addEventListener('click', async () => {
                 endTime: formValues.endTime,
                 place: formValues.place,
                 state: "Aceptada",
-                registerDate: new Date()
+                registerDate: new Date(),
+                reminderSent: false
             });
 
             Swal.fire('¡Éxito!', 'El evento ha sido registrado y aprobado directamente.', 'success')
-            .then((result) => {
-                if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
-                    location.reload();
-                }
-            });
+                .then((result) => {
+                    if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
+                        location.reload();
+                    }
+                });
 
         } catch (error) {
             console.error("Error al crear el evento directo:", error);
