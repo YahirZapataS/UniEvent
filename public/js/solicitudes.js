@@ -162,7 +162,6 @@ form.addEventListener("submit", async (e) => {
         }
     });
 
-    // Recolección de datos
     const title = document.getElementById('tituloPersona').value;
     const name = document.getElementById("name").value;
     const cargo = document.getElementById('puestoTrabajo').value;

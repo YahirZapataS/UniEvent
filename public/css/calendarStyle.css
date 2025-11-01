@@ -84,16 +84,20 @@ main {
         width: 100%;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         padding: 10px;
+        flex-direction: row;
+        justify-content: space-around;
+        flex-wrap: wrap;
     }
 
     .sidebar h3 {
-        margin-bottom: 10px;
+        display: none;
     }
 
     .sidebar ul {
         display: flex;
         justify-content: space-around;
         flex-wrap: wrap;
+        width: 100%;
     }
 
     .sidebar li {
@@ -106,7 +110,7 @@ main {
     }
 
     #calendar {
-        padding: 20px;
+        padding: 10px;
         max-width: 100%;
     }
 }

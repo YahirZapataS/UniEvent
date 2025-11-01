@@ -12,7 +12,9 @@
         })();
     </script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.8/dist/sweetalert2.min.css">
+
     <link rel="stylesheet" href="css/requestsStyle.css">
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
@@ -25,131 +27,125 @@
             <h1>Solicitar Espacio Académico</h1>
             <form id="formSolicitud">
 
-                <div class="form-section">
-                    <h2>Datos del Solicitante</h2>
-                    <div class="input-group">
-                        <label for="tituloPersona">Título (Se refiere al grado profesional o académico)</label>
-                        <select id="tituloPersona">
-                            <option value="">Seleccione</option>
-                            <option value="Dr.">Dr.</option>
-                            <option value="Dra.">Dra.</option>
-                            <option value="Mtro.">Mtro.</option>
-                            <option value="Mtra.">Mtra.</option>
-                            <option value="Lic.">Lic.</option>
-                            <option value="C.">C.</option>
-                        </select>
-                    </div>
-                    <div class="input-group">
-                        <label for="name">Nombre del responsable</label>
-                        <input type="text" id="name" required>
-                    </div>
-                    <div class="input-group">
-                        <label for="puestoTrabajo">Cargo o puesto (Se refiere a tu rol en la Institución)</label>
-                        <select id="puestoTrabajo">
-                            <option value="">Seleccione</option>
-                            <option value="Administrativo">Administrativo</option>
-                            <option value="Docente">Docente</option>
-                            <option value="Estudiante">Estudiante</option>
-                        </select>
-                    </div>
-                    <div class="input-group">
-                        <label for="email">Correo Institucional</label>
-                        <input type="email" id="email" required placeholder="example@estudiantes.uv.mx / @uv.mx">
-                    </div>
-                </div>
+                <div class="form-grid">
 
-                <div class="form-section">
-                    <h2>Detalles de la Actividad</h2>
-                    <div class="input-group">
-                        <label for="activityType">Tipo de actividad</label>
-                        <select id="activityType" required>
-                            <option value="">Seleccione</option>
-                            <option value="Conferencia">Conferencia</option>
-                            <option value="Taller">Taller</option>
-                            <option value="Curso">Curso</option>
-                            <option value="Junta">Junta / Reunión</option>
-                            <option value="Actividad Académica">Actividad Académica (Exámenes, Proyectos, Etc.)</option>
-                        </select>
+                    <div class="form-section">
+                        <h2>Datos del Solicitante</h2>
+                        <div class="input-group">
+                            <label for="tituloPersona">Título (Se refiere al grado profesional o académico)</label>
+                            <select id="tituloPersona">
+                                <option value="">Seleccione</option>
+                                <option value="Dr.">Dr.</option>
+                                <option value="Dra.">Dra.</option>
+                                <option value="Mtro.">Mtro.</option>
+                                <option value="Mtra.">Mtra.</option>
+                                <option value="Lic.">Lic.</option>
+                                <option value="C.">C.</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="name">Nombre del responsable</label>
+                            <input type="text" id="name" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="puestoTrabajo">Puesto de trabajo o adscripción</label>
+                            <input type="text" id="puestoTrabajo" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="email">Correo Institucional</label>
+                            <input type="email" id="email" required>
+                        </div>
                     </div>
-                    <div class="input-group">
-                        <label for="activityName">Título de la actividad</label>
-                        <input type="text" id="activityName" required
-                            placeholder="Ej. La contabilidad y sus antecedentes">
-                    </div>
-                    <div class="input-group">
-                        <label for="description">Descripción (Opcional)</label>
-                        <textarea id="description"
-                            placeholder="Descripción corta del tema que aborda tu actividad"></textarea>
-                    </div>
-                </div>
 
+                    <div class="form-section">
+                        <h2>Detalles de la Actividad</h2>
+                        <div class="input-group">
+                            <label for="activityType">Tipo de actividad</label>
+                            <select id="activityType">
+                                <option value="">Seleccione</option>
+                                <option value="Conferencia">Conferencia</option>
+                                <option value="Taller">Taller</option>
+                                <option value="Curso">Curso</option>
+                                <option value="Junta">Junta / Reunión</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="activityName">Nombre de la actividad</label>
+                            <input type="text" id="activityName" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="description">Descripción breve de la actividad</label>
+                            <textarea id="description" placeholder="Objetivo, audiencia, duración, etc."
+                                required></textarea>
+                        </div>
+                    </div>
+
+                </div>
                 <div class="form-section">
                     <h2>Fecha y Lugar</h2>
-                    <div class="input-group">
-                        <label for="place">Espacio Deseado</label>
-                        <select id="place" required>
-                            <option value="">Seleccione una opción</option>
-                            <option value="Auditorio">Auditorio C.P.A. Josefina Góngora Espitia</option>
-                            <option value="Aula 1">Aula 1</option>
-                            <option value="Aula 2">Aula 2</option>
-                            <option value="Aula 3">Aula 3</option>
-                            <option value="Aula 4">Aula 4</option>
-                            <option value="Aula 5">Aula 5</option>
-                            <option value="Aula 6">Aula 6</option>
-                            <option value="Aula 7">Aula 9</option>
-                            <option value="Aula 8">Aula 10</option>
-                            <option value="Aula 9">Aula 11</option>
-                            <option value="Aula 10">Aula 12</option>
-                            <option value="Aula 11">Aula 13</option>
-                            <option value="Aula 12">Aula 14</option>
-                            <option value="Aula 13">Aula 15</option>
-                            <option value="Aula 14">Aula 16</option>
-                            <option value="Aula 15">Aula 17</option>
-                            <option value="Aula 16">Aula 18</option>
-                            <option value="Aula 17">Laboratorio de LIS</option>
-                            <option value="Aula 18">Laboratorio de LSCA</option>
-                        </select>
-                    </div>
-                    <div class="input-group">
-                        <div class="label-container">
-                            <label for="date">Fecha</label>
-                            <button type="button" id="nomenclaturaBtn" class="info-btn"
-                                aria-label="Mostrar nomenclatura de colores">?</button>
+
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label for="date">Fecha de la actividad</label>
+                            <input type="date" id="date" required>
                         </div>
-                        <input type="text" id="date" placeholder="Seleccionar Fecha" required>
-                    </div>
-                    <div class="input-group">
-                        <label for="startTime">Hora de inicio</label>
-                        <input type="time" id="startTime" required>
-                    </div>
-                    <div class="input-group">
-                        <label for="endTime">Hora de finalización</label>
-                        <input type="time" id="endTime" required>
-                    </div>
+                        <div class="input-group">
+                            <label for="place">Lugar</label>
+                            <select id="place" required>
+                                <option value="">Seleccione el lugar</option>
+                                <option value="Auditorio 1">Auditorio A (Auditorio)</option>
+                                <option value="Auditorio 2">Auditorio B (Auditorio)</option>
+                                <option value="Sala de usos múltiples">Sala de usos múltiples</option>
+                                <option value="Sala de juntas">Sala de juntas</option>
+                                <option value="Aula 1">Aula 1</option>
+                                <option value="Aula 2">Aula 2</option>
+                                <option value="Aula 3">Aula 3</option>
+                                <option value="Aula 4">Aula 4</option>
+                                <option value="Aula 5">Aula 5</option>
+                                <option value="Aula 6">Aula 6</option>
+                                <option value="Aula 7">Aula 7</option>
+                                <option value="Aula 8">Aula 8</option>
+                                <option value="Aula 9">Aula 9</option>
+                                <option value="Aula 10">Aula 10</option>
+                                <option value="Aula 11">Aula 11</option>
+                                <option value="Aula 12">Aula 12</option>
+                                <option value="Aula 13">Aula 13</option>
+                                <option value="Aula 14">Aula 14</option>
+                                <option value="Aula 15">Aula 15</option>
+                                <option value="Aula 16">Aula 16</option>
+                                <option value="Aula 17">Aula 17</option>
+                                <option value="Aula 18">Aula 18</option>
+                                <option value="Aula 19">Laboratorio de LIS</option>
+                                <option value="Aula 20">Laboratorio de LSCA</option>
+                            </select>
+                        </div>
 
-                    <div class="input-group">
-                        <label for="comments">Comentarios adicionales (Opcional)</label>
-                        <textarea id="comments"
-                            placeholder="¿Requieres añadir instrucciones extras?"></textarea>
-                    </div>
-                </div>
+                        <div class="form-grid">
+                            <div class="input-group">
+                                <label for="startTime">Hora de inicio</label>
+                                <input type="time" id="startTime" required>
+                            </div>
+                            <div class="input-group">
+                                <label for="endTime">Hora de finalización</label>
+                                <input type="time" id="endTime" required>
+                            </div>
+                        </div>
 
-                <div class="button-group">
-                    <button type="submit">Enviar Solicitud</button>
-                    <button type="button" id="btnBack">Regresar</button>
-                </div>
+                        <div class="input-group">
+                            <label for="comments">Comentarios adicionales (Opcional)</label>
+                            <textarea id="comments" placeholder="¿Requieres añadir instrucciones extras?"></textarea>
+                        </div>
+
+                        <div class="button-group">
+                            <button type="submit">Enviar Solicitud</button>
+                            <button type="button" id="btnBack">Regresar</button>
+                        </div>
 
             </form>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.8/dist/sweetalert2.all.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    <script type="module">
-        (function () {
-            emailjs.init("IyDvp3Qr5cKPcCyWS");
-        })();
-    </script>
     <script type="module" src="js/firebaseConfig.js"></script>
     <script type="module" src="js/solicitudes.js"></script>
     <script>
@@ -157,9 +153,6 @@
             window.location.href = 'index.html';
         });
     </script>
-</body>
-
-</html>
 </body>
 
 </html>

@@ -9,7 +9,7 @@
   <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.8/dist/sweetalert2.min.css">
   <link rel="stylesheet" href="./css/dashboardStyle.css">
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-  <script type="module" src="./js/dashboard-configuration.js"></script> 
+  <script type="module" src="./js/dashboard-configuration.js"></script>
 </head>
 
 <body>
@@ -22,6 +22,7 @@
         <li><a href="dashboard-approved.html">Aprobadas</a></li>
         <li><a href="dashboard-declined.html">Rechazadas</a></li>
         <li><a href="dashboard-finished.html">Concluidas</a></li>
+        <li><a href="dashboard-reports.html">Reportes</a></li>
         <li><a href="dashboard-configuration.html">Configuración</a></li>
         <li><a href="index.html" id="cerrarSesion">Cerrar sesión</a></li>
       </ul>
@@ -31,7 +32,7 @@
       <h2>Configuración del Sistema</h2>
 
       <form id="configForm">
-        
+
         <section class="config-section">
           <h3>Correo del Administrador</h3>
           <p>Este correo recibirá las notificaciones de nuevas solicitudes y recordatorios.</p>
@@ -40,27 +41,28 @@
             <input type="email" id="adminEmail" required placeholder="ejemplo@universidad.mx">
           </div>
         </section>
-        
+
         <section class="config-section">
           <h3>Recordatorios de Eventos</h3>
-          <p>Define con cuánto tiempo de anticipación (antes de que inicie el evento) deseas recibir un correo de recordatorio.</p>
-          
+          <p>Define con cuánto tiempo de anticipación (antes de que inicie el evento) deseas recibir un correo de
+            recordatorio.</p>
+
           <div class="input-group-config">
             <label for="reminderTime">Tiempo de Recordatorio:</label>
             <select id="reminderTime" required>
-                <option value="none">Deshabilitar recordatorios</option>
-                <option value="15m">15 minutos antes</option>
-                <option value="30m">30 minutos antes</option>
-                <option value="1h">1 hora antes</option>
-                <option value="2h">2 horas antes</option>
-                <option value="1d">1 día antes</option>
+              <option value="none">Deshabilitar recordatorios</option>
+              <option value="15m">15 minutos antes</option>
+              <option value="30m">30 minutos antes</option>
+              <option value="1h">1 hora antes</option>
+              <option value="2h">2 horas antes</option>
+              <option value="1d">1 día antes</option>
             </select>
           </div>
         </section>
-        
+
         <button type="submit" id="saveConfigBtn" class="btn-save">Guardar Toda la Configuración</button>
       </form>
-      
+
     </main>
   </div>
 </body>

@@ -26,7 +26,7 @@ onAuthStateChanged(auth, (user) => {
     }
 });
 
-async function loadConfiguration() {
+async function loadConfiguration() { 
     try {
         const docRef = doc(db, 'config', ADMIN_CONFIG_ID);
         const docSnap = await getDoc(docRef);

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reportes - UniEvent</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.8/dist/sweetalert2.all.min.js"></script>
+    <link rel="stylesheet" href="./css/dashboardStyle.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script type="module" src="./js/reports.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <h3>Menú</h3>
+            <ul>
+                <li><a href="dashboard.html">Solicitudes</a></li>
+                <li><a href="dashboard-calendar.html">Calendario</a></li>
+                <li><a href="dashboard-approved.html">Aprobadas</a></li>
+                <li><a href="dashboard-declined.html">Rechazadas</a></li>
+                <li><a href="dashboard-finished.html">Concluidas</a></li>
+                <li><a href="dashboard-reports.html">Reportes</a></li>
+                <li><a href="dashboard-configuration.html">Configuración</a></li>
+                <li><a href="index.html" id="cerrarSesion">Cerrar sesión</a></li>
+            </ul>
+        </aside>
+
+        <main class="content" id="principalContent">
+            <h2>Reportes de Uso y Demanda</h2>
+
+            <div class="reports-nav">
+                <button class="nav-button active" data-target="graphics-view">Gráficas</button>
+                <button class="nav-button" data-target="history-view">Historial Completo</button>
+            </div>
+
+            <div id="graphics-view" class="report-view active">
+                <div class="reports-grid">
+                    <div class="chart-card">
+                        <h3>Distribución de Solicitudes por Estado</h3>
+                        <canvas id="statusChart"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Top 5 Lugares más Solicitados</h3>
+                        <canvas id="placeChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div id="history-view" class="report-view">
+                <section id="filterSection">
+                    <h3>Filtros de Búsqueda</h3>
+                    <form id="historyFilterForm" class="filter-form">
+                        <select id="filterState" class="filter-input">
+                            <option value="">Todos los Estados</option>
+                            <option value="Pendiente">Pendiente</option>
+                            <option value="Aceptada">Aceptada</option>
+                            <option value="Rechazada">Rechazada</option>
+                            <option value="Concluida">Concluida</option>
+                        </select>
+                        <select id="place">
+                            <option value="">Todos los lugares</option>
+                            <option value="Auditorio">Auditorio C.P.A. Josefina Góngora Espitia</option>
+                            <option value="Aula 1">Aula 1</option>
+                            <option value="Aula 2">Aula 2</option>
+                            <option value="Aula 3">Aula 3</option>
+                            <option value="Aula 4">Aula 4</option>
+                            <option value="Aula 5">Aula 5</option>
+                            <option value="Aula 6">Aula 6</option>
+                            <option value="Aula 7">Aula 9</option>
+                            <option value="Aula 8">Aula 10</option>
+                            <option value="Aula 9">Aula 11</option>
+                            <option value="Aula 10">Aula 12</option>
+                            <option value="Aula 11">Aula 13</option>
+                            <option value="Aula 12">Aula 14</option>
+                            <option value="Aula 13">Aula 15</option>
+                            <option value="Aula 14">Aula 16</option>
+                            <option value="Aula 15">Aula 17</option>
+                            <option value="Aula 16">Aula 18</option>
+                            <option value="Aula 17">Laboratorio de LIS</option>
+                            <option value="Aula 18">Laboratorio de LSCA</option>
+                        </select>
+
+                        <input type="date" id="filterDateFrom" class="filter-input" placeholder="Desde Fecha">
+
+                        <input type="date" id="filterDateTo" class="filter-input" placeholder="Hasta Fecha">
+
+                        <select id="filterActivityType" class="filter-input">
+                            <option value="">Todo Tipo de Actividad</option>
+                            <option value="Conferencia">Conferencia</option>
+                            <option value="Taller">Taller</option>
+                            <option value="Curso">Curso</option>
+                            <option value="Junta">Junta / Reunión</option>
+                        </select>
+
+                        <button type="submit" class="btn-filter">Aplicar Filtros</button>
+                        <button type="button" id="btnClearFilters" class="btn-filter secondary">Limpiar</button>
+                        <button type="button" id="btnPrintReport" class="btn-filter print-button">Imprimir</button>
+                    </form>
+                </section>
+
+                <section id="resultsSection">
+                    <h3>Resultados</h3>
+                    <table id="historyTable" border="1">
+                        <thead>
+                            <tr>
+                                <th>Responsable</th>
+                                <th>Actividad</th>
+                                <th>Lugar</th>
+                                <th>Fecha</th>
+                                <th>Hora Inicio</th>
+                                <th>Hora Fin</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    <p id="historyMessage"></p>
+                </section>
+            </div>
+
+        </main>
+    </div>
+</body>
+
+</html>
