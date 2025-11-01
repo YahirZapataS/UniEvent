@@ -8,11 +8,49 @@ const table = document.querySelector('#applicationsTable tbody');
 const btnClose = document.getElementById('cerrarSesion');
 const btnAdd = document.getElementById('fabAdd');
 
+async function updateFinishedRequests() {
+    const requestsRef = collection(db, 'solicitudes');
+    const q = query(requestsRef, where("state", "==", "Aceptada"));
+    
+    try {
+        const snapshot = await getDocs(q);
+        const now = new Date();
+        const nowString = now.toISOString().slice(0, 10); // YYYY-MM-DD
+        const nowTime = now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' }); // HH:MM
+
+        let updatedCount = 0;
+
+        for (const docSnap of snapshot.docs) {
+            const data = docSnap.data();
+            const docId = docSnap.id;
+            
+            const eventDate = data.date;
+            const endTime = data.endTime;
+
+            if (eventDate < nowString || (eventDate === nowString && endTime < nowTime)) {
+                
+                const docRef = doc(db, "solicitudes", docId);
+                await updateDoc(docRef, { state: "Concluida" });
+                updatedCount++;
+            }
+        }
+
+        if (updatedCount > 0) {
+            console.log(`[Limpieza] ${updatedCount} solicitudes han sido marcadas como Concluidas.`);
+        }
+
+    } catch (error) {
+        console.error("Error al actualizar solicitudes a 'Concluido':", error);
+    }
+}
+
 onAuthStateChanged(auth, async (user) => {
     if (!user) {
         window.location.href = 'index.html';
         return;
     }
+
+    await updateFinishedRequests();
 
     const requestsRef = collection(db, 'solicitudes');
     const q = query(

@@ -294,10 +294,6 @@ tbody tr:hover {
     gap: 15px;
 }
 
-/* dashboardStyle.css */
-
-/* ... (Estilos existentes) ... */
-
 /* Responsive Design */
 @media (max-width: 768px) {
     .container {

@@ -1,25 +1,16 @@
-// index.js (Corrección Definitiva: Inicialización de SendGrid en el Runtime)
-
-// 1. IMPORTACIONES
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-const { onSchedule } = require('firebase-functions/v2/scheduler'); 
+const { onSchedule } = require('firebase-functions/v2/scheduler');
 const { getFirestore } = require('firebase-admin/firestore');
 const sgMail = require('@sendgrid/mail'); // Importar SendGrid
 
 admin.initializeApp();
 
-// 2. CONFIGURACIÓN
+
 const DB_ID_TARGET = 'unieventbd';
-const db = getFirestore(admin.app(), DB_ID_TARGET); 
+const db = getFirestore(admin.app(), DB_ID_TARGET);
 const ADMIN_CONFIG_ID = 'adminSettings';
 
-// ⬇️ *** CORRECCIÓN: Eliminar la inicialización global de SendGrid *** ⬇️
-// (Estas líneas se moverán DENTRO de la función)
-// const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY; 
-// sgMail.setApiKey(SENDGRID_API_KEY); 
-
-// --- FUNCIÓN DE UTILIDAD (calculateTimeDifference se mantiene) ---
 function calculateTimeDifference(timeStr) {
     const unit = timeStr.slice(-1);
     const value = parseInt(timeStr.slice(0, -1));
@@ -33,9 +24,7 @@ function calculateTimeDifference(timeStr) {
 }
 
 
-// =====================================================================
-// 3. CLOUD FUNCTION (Modificada para SendGrid)
-// =====================================================================
+
 exports.sendEventReminders = onSchedule({
     schedule: 'every 1 minutes',
     timeoutSeconds: 300,
@@ -43,34 +32,34 @@ exports.sendEventReminders = onSchedule({
     timeZone: 'America/Mexico_City'
 }, async (context) => {
 
-    // ⬇️ *** CORRECCIÓN: Inicializar SendGrid DENTRO del runtime *** ⬇️
+
     const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
     if (!SENDGRID_API_KEY) {
-         console.error("Error fatal: La clave API de SendGrid (SENDGRID_API_KEY) no está configurada en Google Cloud Run.");
-         return null; // Detener la ejecución si la clave no está
+        console.error("Error fatal: La clave API de SendGrid (SENDGRID_API_KEY) no está configurada en Google Cloud Run.");
+        return null;
     }
-    sgMail.setApiKey(SENDGRID_API_KEY); // Configurar la API key en el runtime
-    // ⬆️ *** FIN DE LA CORRECCIÓN *** ⬆️
+    sgMail.setApiKey(SENDGRID_API_KEY);
+
 
     console.log("Iniciando chequeo de recordatorios programado (usando SendGrid)...");
 
-    // 1. Obtener la configuración
+
     const configSnap = await db.collection('config').doc(ADMIN_CONFIG_ID).get();
-    if (!configSnap.exists) { 
+    if (!configSnap.exists) {
         console.log("Configuración no encontrada. Finalizando.");
-        return null; 
+        return null;
     }
-    
+
     const { ADMIN_EMAIL, REMINDER_TIME } = configSnap.data();
-    if (REMINDER_TIME === 'none' || !ADMIN_EMAIL) { 
+    if (REMINDER_TIME === 'none' || !ADMIN_EMAIL) {
         console.log("Recordatorios deshabilitados.");
-        return null; 
+        return null;
     }
-    
+
     const reminderTimeMs = calculateTimeDifference(REMINDER_TIME);
     const now = new Date().getTime();
 
-    // 2. Consultar Solicitudes
+
     const snapshot = await db.collection('solicitudes')
         .where("state", "==", "Aceptada")
         .where("reminderSent", "!=", true)
@@ -81,8 +70,8 @@ exports.sendEventReminders = onSchedule({
     for (const docSnap of snapshot.docs) {
         const event = docSnap.data();
         const eventId = docSnap.id;
-        
-        // ... (Lógica de 'isDue' y zona horaria se mantiene) ...
+
+
         const dateStr = event.date;
         const timeStr = event.startTime;
         const [year, month, day] = dateStr.split('-').map(Number);
@@ -98,7 +87,7 @@ exports.sendEventReminders = onSchedule({
         if (isDue) {
             const msg = {
                 to: ADMIN_EMAIL,
-                from: 'zs21021768@estudiantes.uv.mx', 
+                from: 'zs21021768@estudiantes.uv.mx',
                 subject: `🚨 RECORDATORIO: El evento "${event.activityName}" inicia pronto`,
                 html: `
                     <p>Hola, Gestor,</p>
@@ -112,11 +101,11 @@ exports.sendEventReminders = onSchedule({
             };
 
             try {
-                // ** ENVÍO DE CORREO (SendGrid) **
+
                 await sgMail.send(msg);
 
                 console.log(`Éxito: Recordatorio enviado para ${event.activityName}`);
-                
+
                 const updatePromise = db.collection('solicitudes').doc(eventId).update({
                     reminderSent: true,
                     reminderSentAt: admin.firestore.Timestamp.now()
@@ -124,7 +113,7 @@ exports.sendEventReminders = onSchedule({
                 updatePromises.push(updatePromise);
 
             } catch (error) {
-                // Manejo de errores de SendGrid
+
                 if (error.response) {
                     console.error('Error de SendGrid:', error.response.body);
                 } else {

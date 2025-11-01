@@ -10,7 +10,7 @@ onAuthStateChanged(auth, async (user) => {
         return;
     }
 
-    const q = query(collection(db, "solicitudes"), where("state", "==", "Aceptada"));
+    const q = query(collection(db, "solicitudes"), where("state", "==", "Concluida"));
     const snapshot = await getDocs(q);
 
     const now = new Date();
