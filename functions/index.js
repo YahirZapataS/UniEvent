@@ -87,10 +87,10 @@ exports.sendEventReminders = onSchedule({
         if (isDue) {
             const msg = {
                 to: ADMIN_EMAIL,
-                from: 'zs21021768@estudiantes.uv.mx',
+                from: 'kroblero@uv.mx',
                 subject: `🚨 RECORDATORIO: El evento "${event.activityName}" inicia pronto`,
                 html: `
-                    <p>Hola, Gestor,</p>
+                    <p>Estimada Lic. Karla D. Roblero,</p>
                     <p>Este es un recordatorio automático de UniEvent. Tienes un evento aprobado que comenzará pronto.</p>
                     <p><b>Actividad:</b> ${event.activityName}</p>
                     <p><b>Lugar:</b> ${event.place}</p>

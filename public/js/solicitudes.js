@@ -1,7 +1,7 @@
 import { db } from "./firebaseConfig.js";
 import { collection, addDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-const ADMIN_EMAIL = "zs21021768@estudiantes.uv.mx";
+const ADMIN_EMAIL = "kroblero@uv.mx";
 const EMAILJS_SERVICE_ID_NEW = "service_jhvkojp";
 const EMAILJS_TEMPLATE_ID_NEW = "template_547yaif";
 
