@@ -4,48 +4,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel - Gestor</title>
+    <title>Solicitudes Rechazadas - UniEvent</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.8/dist/sweetalert2.all.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.8/dist/sweetalert2.min.css">
-    <link rel="stylesheet" href="./css/dashboardStyle.css">
+    <link rel="stylesheet" href="./css/dashboardDeclinedStyle.css">
     <script type="module" src="./js/dashboard-requests.js"></script>
 </head>
 
 <body>
-    <div class="container">
+    <div class="dashboard-container">
         <aside class="sidebar">
-            <h3 id="titleSidebar">Menú</h3>
-            <ul>
-                <li><a href="dashboard.html">Solicitudes</a></li>
-                <li><a href="dashboard-calendar.html">Calendario</a></li>
-                <li><a href="dashboard-approved.html">Aprobadas</a></li>
-                <li><a href="dashboard-declined.html">Rechazadas</a></li>
-                <li><a href="dashboard-finished.html">Concluidas</a></li>
-                <li><a href="dashboard-reports.html">Reportes</a></li>
-                <li><a href="dashboard-configuration.html">Configuración</a></li>
-                <li><a href="index.html" id="cerrarSesion">Cerrar sesión</a></li>
-            </ul>
+            <div class="brand">Uni<span>Event</span></div>
+            <nav>
+                <ul>
+                    <li><a href="dashboard.html">Solicitudes</a></li>
+                    <li><a href="dashboard-calendar.html">Calendario</a></li>
+                    <li><a href="dashboard-approved.html">Aprobadas</a></li>
+                    <li class="active"><a href="dashboard-declined.html">Rechazadas</a></li>
+                    <li><a href="dashboard-finished.html">Concluidas</a></li>
+                    <li class="separator"></li>
+                    <li><a href="dashboard-reports.html">Reportes</a></li>
+                    <li><a href="dashboard-configuration.html">Configuración</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-end">
+                <a href="index.html" id="cerrarSesion" class="btn-logout">Cerrar sesión</a>
+            </div>
         </aside>
 
-        <main class="content" id="principalContent">
-            <h2>Solicitudes Rechazadas</h2>
-            <table id="applicationsTable" border="1">
-                <thead>
-                    <tr>
-                        <th>Responsable</th>
-                        <th>Tipo de actividad</th>
-                        <th>Actividad</th>
-                        <th>Descripción</th>
-                        <th>Fecha</th>
-                        <th>Hora de Inicio</th>
-                        <th>Lugar</th>
-                        <th>Estado</th>
-                    </tr>
-                </thead>
-                <tbody>
+        <main class="main-content">
+            <header class="page-header">
+                <div class="title-area">
+                    <h1>Solicitudes Rechazadas</h1>
+                    <p>Historial de solicitudes que no pudieron ser procesadas o aprobadas.</p>
+                </div>
+            </header>
 
-                </tbody>
-            </table>
+            <section class="card-table">
+                <table id="applicationsTable">
+                    <thead>
+                        <tr>
+                            <th>Responsable</th>
+                            <th>Tipo</th>
+                            <th>Actividad</th>
+                            <th>Descripción</th>
+                            <th>Fecha</th>
+                            <th>Horario</th>
+                            <th>Lugar</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        </tbody>
+                </table>
+            </section>
         </main>
     </div>
 </body>

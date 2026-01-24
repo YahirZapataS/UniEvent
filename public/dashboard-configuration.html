@@ -1,70 +1,83 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Configuración - Gestor</title>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.8/dist/sweetalert2.all.min.js"></script>
-  <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.8/dist/sweetalert2.min.css">
-  <link rel="stylesheet" href="./css/dashboardStyle.css">
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-  <script type="module" src="./js/dashboard-configuration.js"></script>
+  <title>Configuración - UniEvent</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.8/dist/sweetalert2.min.css">
+  <link rel="stylesheet" href="./css/dashboardConfigurationStyle.css">
 </head>
-
 <body>
-  <div class="container">
+  <div class="dashboard-container">
     <aside class="sidebar">
-      <h3>Menú</h3>
-      <ul>
-        <li><a href="dashboard.html">Solicitudes</a></li>
-        <li><a href="dashboard-calendar.html">Calendario</a></li>
-        <li><a href="dashboard-approved.html">Aprobadas</a></li>
-        <li><a href="dashboard-declined.html">Rechazadas</a></li>
-        <li><a href="dashboard-finished.html">Concluidas</a></li>
-        <li><a href="dashboard-reports.html">Reportes</a></li>
-        <li><a href="dashboard-configuration.html">Configuración</a></li>
-        <li><a href="index.html" id="cerrarSesion">Cerrar sesión</a></li>
-      </ul>
+      <div class="brand">Uni<span>Event</span></div>
+      <nav>
+        <ul>
+          <li><a href="dashboard.html">Solicitudes</a></li>
+          <li><a href="dashboard-calendar.html">Calendario</a></li>
+          <li><a href="dashboard-approved.html">Aprobadas</a></li>
+          <li><a href="dashboard-declined.html">Rechazadas</a></li>
+          <li><a href="dashboard-finished.html">Concluidas</a></li>
+          <li class="separator"></li>
+          <li><a href="dashboard-reports.html">Reportes</a></li>
+          <li class="active"><a href="dashboard-configuration.html">Configuración</a></li>
+        </ul>
+      </nav>
+      <div class="sidebar-end">
+        <a href="index.html" id="cerrarSesion" class="btn-logout">Cerrar sesión</a>
+      </div>
     </aside>
 
-    <main class="content" id="principalContent">
-      <h2>Configuración del Sistema</h2>
+    <main class="main-content">
+      <header class="page-header">
+        <h1>Configuración del Sistema</h1>
+        <p>Ajusta las preferencias de notificaciones y administración de la plataforma.</p>
+      </header>
 
-      <form id="configForm">
-
-        <section class="config-section">
-          <h3>Correo del Administrador</h3>
-          <p>Este correo recibirá las notificaciones de nuevas solicitudes y recordatorios.</p>
-          <div class="input-group-config">
-            <label for="adminEmail">Correo del Administrador:</label>
-            <input type="email" id="adminEmail" required placeholder="ejemplo@universidad.mx">
+      <form id="configForm" class="config-grid">
+        <section class="config-card">
+          <div class="card-header">
+            <h3>Correo del Administrador</h3>
+          </div>
+          <div class="card-body">
+            <p>Este correo recibirá las notificaciones de nuevas solicitudes y recordatorios del sistema.</p>
+            <div class="input-group">
+              <label for="adminEmail">Correo Institucional</label>
+              <input type="email" id="adminEmail" required placeholder="ejemplo@universidad.mx">
+            </div>
           </div>
         </section>
 
-        <section class="config-section">
-          <h3>Recordatorios de Eventos</h3>
-          <p>Define con cuánto tiempo de anticipación (antes de que inicie el evento) deseas recibir un correo de
-            recordatorio.</p>
-
-          <div class="input-group-config">
-            <label for="reminderTime">Tiempo de Recordatorio:</label>
-            <select id="reminderTime" required>
-              <option value="none">Deshabilitar recordatorios</option>
-              <option value="15m">15 minutos antes</option>
-              <option value="30m">30 minutos antes</option>
-              <option value="1h">1 hora antes</option>
-              <option value="2h">2 horas antes</option>
-              <option value="1d">1 día antes</option>
-            </select>
+        <section class="config-card">
+          <div class="card-header">
+            <h3>Recordatorios de Eventos</h3>
+          </div>
+          <div class="card-body">
+            <p>Define con cuánto tiempo de anticipación se enviará el recordatorio antes del inicio del evento.</p>
+            <div class="input-group">
+              <label for="reminderTime">Tiempo de Anticipación</label>
+              <select id="reminderTime" required>
+                <option value="none">Deshabilitar recordatorios</option>
+                <option value="15m">15 minutos antes</option>
+                <option value="30m">30 minutos antes</option>
+                <option value="1h">1 hora antes</option>
+                <option value="2h">2 horas antes</option>
+                <option value="1d">1 día antes</option>
+              </select>
+            </div>
           </div>
         </section>
 
-        <button type="submit" id="saveConfigBtn" class="btn-save">Guardar Toda la Configuración</button>
+        <div class="form-actions">
+          <button type="submit" id="saveConfigBtn" class="btn-save">Guardar Cambios</button>
+        </div>
       </form>
-
     </main>
   </div>
-</body>
 
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.8/dist/sweetalert2.all.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script type="module" src="./js/dashboard-configuration.js"></script>
+</body>
 </html>

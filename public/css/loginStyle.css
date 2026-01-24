@@ -1,141 +1,205 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
+:root {
+    --primary: #2563eb;
+    --primary-dark: #1e40af;
+    --bg-page: #f1f5f9;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --white: #ffffff;
+}
+
+* {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background-color: var(--bg-page);
+    height: 100vh;
     display: flex;
-    justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    color: #333;
+    justify-content: center;
 }
 
 .login-container {
     display: flex;
-    width: 100%;
+    width: 90%;
     max-width: 1000px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    height: 600px;
+    background-color: var(--white);
+    border-radius: 20px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
     overflow: hidden;
 }
 
+/* Panel Izquierdo */
 .login-left {
-    flex: 1;
+    flex: 1.2;
     background-image: url('../assets/betterteam-bolsa-de-trabajo-uv.webp');
     background-size: cover;
     background-position: center;
+    position: relative;
 }
 
-.login-right {
-    flex: 1;
+.overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(37, 99, 235, 0.4), rgba(30, 64, 175, 0.8));
     display: flex;
-    justify-content: center;
-    align-items: center;
+    align-items: flex-end;
     padding: 40px;
 }
 
-.login-card {
-    width: 100%;
-    max-width: 400px;
-    text-align: center;
+.overlay-content {
+    color: var(--white);
 }
 
-h1 {
-    color: #615ded;
-    margin-bottom: 5px;
+.overlay-content h2 { font-size: 2rem; margin-bottom: 10px; font-weight: 800; }
+.overlay-content p { font-size: 1rem; opacity: 0.9; }
+
+/* Panel Derecho */
+.login-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 50px;
 }
 
-h2 {
-    color: #4a5568;
-    font-weight: normal;
-    margin-bottom: 30px;
-}
+.login-card { width: 100%; }
 
-.input-group {
-    margin-bottom: 20px;
-    text-align: left;
-}
+.login-header { text-align: center; margin-bottom: 35px; }
+.login-header h1 { font-size: 2.2rem; font-weight: 800; color: var(--text-main); }
+.login-header h1 span { color: var(--primary); }
+.login-header p { color: var(--text-muted); font-size: 0.95rem; margin-top: 5px; }
 
+/* Inputs */
+.input-group { margin-bottom: 20px; }
 .input-group label {
     display: block;
-    font-weight: bold;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-main);
     margin-bottom: 8px;
-    color: #615ded;
 }
 
-input[type="email"],
-input[type="password"] {
+input {
     width: 100%;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    box-sizing: border-box;
-    transition: border-color 0.3s;
+    padding: 12px 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.2s;
+    background: #f8fafc;
 }
 
-input[type="email"]:focus,
-input[type="password"]:focus {
-    border-color: #5a67d8;
+input:focus {
     outline: none;
+    border-color: var(--primary);
+    background: var(--white);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
 }
 
+/* Botones y Enlaces */
 .login-button {
     width: 100%;
-    padding: 12px;
-    background-color: #5a67d8;
-    color: #fff;
+    padding: 14px;
+    background: var(--primary);
+    color: var(--white);
     border: none;
-    border-radius: 5px;
-    font-size: 18px;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 700;
     cursor: pointer;
-    transition: background-color 0.3s;
-    font-weight: bold;
+    transition: all 0.3s;
+    margin-top: 10px;
 }
 
 .login-button:hover {
-    background-color: #434190;
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
 }
 
 .footer-links {
     margin-top: 30px;
+    text-align: center;
     display: flex;
     flex-direction: column;
     gap: 15px;
-    text-align: center;
 }
 
-.link, .link-request {
-    color: #5a67d8;
+.link {
+    color: var(--text-muted);
     text-decoration: none;
-    font-size: 14px;
-    transition: color 0.3s;
+    font-size: 0.85rem;
+    transition: color 0.2s;
 }
 
-.link:hover, .link-request:hover {
-    color: #434190;
-    text-decoration: underline;
+.link:hover { color: var(--primary); }
+
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #cbd5e1;
+    font-size: 0.8rem;
 }
 
-.link-request {
-    font-weight: bold;
-    border-top: 1px solid #e2e8f0;
-    padding-top: 20px;
-    margin-top: 10px;
+.divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #e2e8f0;
 }
 
-/* Responsive Design */
+.divider span { padding: 0 10px; text-transform: uppercase; }
+
+.button-outline {
+    text-decoration: none;
+    color: var(--primary);
+    font-weight: 600;
+    font-size: 0.9rem;
+    border: 2px solid var(--primary);
+    padding: 10px;
+    border-radius: 10px;
+    transition: all 0.2s;
+}
+
+.button-outline:hover {
+    background: var(--primary);
+    color: var(--white);
+}
+
+.back-to-home {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 2rem;
+    transition: all 0.2s ease;
+    align-self: flex-start; /* Alinea a la izquierda en flex contenedores */
+}
+
+.back-to-home .arrow {
+    font-size: 1.1rem;
+    transition: transform 0.2s ease;
+}
+
+.back-to-home:hover {
+    color: var(--primary);
+}
+
+.back-to-home:hover .arrow {
+    transform: translateX(-4px); /* Pequeña animación de la flecha */
+}
+
+/* Responsive */
 @media (max-width: 768px) {
-    .login-container {
-        flex-direction: column;
-    }
-
-    .login-left {
-        display: none;
-    }
-
-    .login-right {
-        padding: 20px;
-    }
+    .login-container { height: auto; flex-direction: column; }
+    .login-left { display: none; }
+    .login-right { padding: 40px 25px; }
 }

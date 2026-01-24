@@ -1,0 +1,179 @@
+/* --- Variables --- */
+:root {
+    --primary: #2563eb;
+    --dark-bg: #0f172a;
+    --white: #ffffff;
+    --border: #e2e8f0;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+
+body { background-color: #f8fafc; color: var(--text-main); }
+
+.dashboard-container { display: flex; min-height: 100vh; }
+
+/* --- Sidebar (Unificada) --- */
+.sidebar {
+    width: 260px;
+    background-color: var(--dark-bg);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    position: fixed;
+    height: 100vh;
+}
+
+.brand { font-size: 1.5rem; font-weight: 800; margin-bottom: 2rem; padding-left: 1rem; }
+.brand span { color: var(--primary); }
+
+.sidebar ul { list-style: none; }
+.sidebar li { margin-bottom: 0.4rem; }
+.sidebar li.separator { height: 1px; background: rgba(255,255,255,0.1); margin: 1.2rem 0; }
+
+.sidebar a {
+    color: #94a3b8;
+    text-decoration: none;
+    padding: 0.8rem 1rem;
+    display: block;
+    border-radius: 0.6rem;
+    font-size: 0.9rem;
+    transition: 0.2s;
+}
+
+.sidebar li.active a, .sidebar a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.btn-logout {
+    margin-top: auto;
+    color: #fca5a5 !important;
+    text-align: center;
+    border: 1px solid rgba(252, 165, 165, 0.2);
+    padding: 0.8rem;
+    border-radius: 0.6rem;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+/* --- Área Principal --- */
+.main-content { margin-left: 260px; flex-grow: 1; padding: 2.5rem; }
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.page-header h1 { font-size: 1.75rem; font-weight: 800; }
+
+/* --- Navegación Interna --- */
+.reports-nav {
+    display: flex;
+    background: #e2e8f0;
+    padding: 0.3rem;
+    border-radius: 0.5rem;
+}
+
+.nav-button {
+    padding: 0.5rem 1rem;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--text-muted);
+    border-radius: 0.4rem;
+    transition: 0.2s;
+}
+
+.nav-button.active {
+    background: var(--white);
+    color: var(--primary);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* --- Gráficas --- */
+.report-view { display: none; }
+.report-view.active { display: block; }
+
+.reports-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 1.5rem;
+}
+
+.chart-card {
+    background: var(--white);
+    padding: 1.5rem;
+    border-radius: 1rem;
+    border: 1px solid var(--border);
+}
+
+.chart-card h3 {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-main);
+    text-align: center;
+}
+
+.canvas-container { height: 300px; position: relative; }
+
+/* --- Filtros --- */
+.filter-card {
+    background: var(--white);
+    padding: 1.5rem;
+    border-radius: 1rem;
+    border: 1px solid var(--border);
+    margin-bottom: 1.5rem;
+}
+
+.filter-card h3 { font-size: 1rem; margin-bottom: 1.2rem; }
+
+.filter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.filter-input {
+    padding: 0.6rem;
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    background: #f8fafc;
+}
+
+.filter-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+/* --- Tabla --- */
+.card-table {
+    background: var(--white);
+    border-radius: 1rem;
+    border: 1px solid var(--border);
+    overflow: hidden;
+}
+
+table { width: 100%; border-collapse: collapse; }
+th { background: #f8fafc; padding: 1rem; text-align: left; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; }
+td { padding: 1rem; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+
+/* --- Botones --- */
+button { border: none; cursor: pointer; border-radius: 0.5rem; font-weight: 600; padding: 0.6rem 1.2rem; }
+.btn-primary { background: var(--primary); color: white; }
+.btn-secondary { background: #f1f5f9; color: var(--text-muted); }
+.btn-print { background: #0f172a; color: white; }
+
+/* Responsive */
+@media (max-width: 900px) {
+    .sidebar { display: none; }
+    .main-content { margin-left: 0; padding: 1rem; }
+    .reports-grid { grid-template-columns: 1fr; }
+}

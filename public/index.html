@@ -1,64 +1,70 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UniEvent - Gestión de Espacios Académicos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/landingStyle.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.8/dist/sweetalert2.all.min.js"></script>
 </head>
-
 <body>
     <header class="header">
-        <div class="logo">UniEvent</div>
+        <div class="logo">Uni<span>Event</span></div>
         <nav>
-            <ul>
+            <ul class="nav-links">
                 <li><a href="#inicio">Inicio</a></li>
                 <li><a href="#caracteristicas">Características</a></li>
                 <li><a href="#contacto">Contacto</a></li>
             </ul>
         </nav>
         <div class="cta-buttons">
+            <a href="login.html" class="link-login">Iniciar Sesión</a>
             <a href="requests.html" class="button primary">Solicitar Espacio</a>
-            <a href="login.html" class="button secondary">Iniciar Sesión</a>
         </div>
     </header>
 
     <main>
         <section id="inicio" class="hero">
             <div class="hero-content">
-                <h1>Optimiza la Gestión de tus Espacios Académicos</h1>
-                <p id="landing-text">UniEvent te permite administrar, aprobar y calendarizar todas las solicitudes de
-                    eventos universitarios de manera eficiente y centralizada.</p>
-                <a href="requests.html" class="button large-cta">¡Solicita un espacio para tu evento!</a>
+                <h1>Optimiza la Gestión de tus <span>Espacios Académicos</span></h1>
+                <p>UniEvent centraliza solicitudes, aprobaciones y calendarios en una sola plataforma intuitiva y rápida.</p>
+                <div class="hero-actions">
+                    <a href="requests.html" class="button primary large">¡Solicita un espacio ahora!</a>
+                    <a href="#caracteristicas" class="button outline">Saber más</a>
+                </div>
             </div>
         </section>
 
         <section id="caracteristicas" class="features">
-            <h2>Funcionalidades Clave</h2>
+            <div class="section-header">
+                <h2>Funcionalidades Clave</h2>
+                <p>Todo lo que necesitas para una administración impecable</p>
+            </div>
             <div class="feature-grid">
-                <div class="feature-item">
+                <div class="feature-card">
                     <h3>Solicitudes Sencillas</h3>
-                    <p>Un formulario intuitivo para que los usuarios pidan un espacio en segundos.</p>
+                    <p>Formularios optimizados para reducir errores y tiempos de espera.</p>
                 </div>
-                <div class="feature-item">
+                <div class="feature-card">
                     <h3>Calendario Integrado</h3>
-                    <p>Visualiza todas las actividades aprobadas en un calendario claro.</p>
+                    <p>Sincronización en tiempo real para evitar cruces de horarios.</p>
                 </div>
-                <div class="feature-item">
+                <div class="feature-card">
                     <h3>Panel de Control</h3>
-                    <p>Gestiona solicitudes pendientes, aprobadas y rechazadas fácilmente.</p>
+                    <p>Métricas y estados claros para una toma de decisiones rápida.</p>
                 </div>
             </div>
         </section>
 
-        <section id="contacto" class="call-to-action">
-            <h2>¿Listo para digitalizar tu gestión?</h2>
-            <p>Accede al sistema de gestión o envía una solicitud de espacio.</p>
-            <div class="action-buttons">
-                <a href="login.html" class="button secondary">Panel de Gestor</a>
-                <a href="requests.html" class="button primary">Solicitar Espacio</a>
+        <section id="contacto" class="cta-section">
+            <div class="cta-box">
+                <h2>¿Listo para digitalizar tu gestión?</h2>
+                <p>Únete a las facultades que ya están ahorrando tiempo hoy mismo.</p>
+                <div class="action-buttons">
+                    <a href="requests.html" class="button white">Solicitar Espacio</a>
+                    <a href="login.html" class="button ghost">Acceso Gestor</a>
+                </div>
             </div>
         </section>
     </main>
@@ -69,5 +75,4 @@
 
     <script type="module" src="js/landing.js"></script>
 </body>
-
 </html>

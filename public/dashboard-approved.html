@@ -4,47 +4,70 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard Gestor</title>
-  <link rel="stylesheet" href="./css/dashboardStyle.css" />
+  <title>Eventos Aprobados - UniEvent</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/dashboardApprovedStyle.css" />
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script type="module" src="./js/dashboard-requests.js"></script>
 </head>
 
 <body>
-  <div class="container">
+  <div class="dashboard-container">
     <aside class="sidebar">
-      <h3>Menú</h3>
-      <ul>
-        <li><a href="dashboard.html">Solicitudes</a></li>
-        <li><a href="dashboard-calendar.html">Calendario</a></li>
-        <li><a href="dashboard-approved.html">Aprobadas</a></li>
-        <li><a href="dashboard-declined.html">Rechazadas</a></li>
-        <li><a href="dashboard-finished.html">Concluidas</a></li>
-        <li><a href="dashboard-reports.html">Reportes</a></li>
-        <li><a href="dashboard-configuration.html">Configuración</a></li>
-        <li><a href="index.html" id="cerrarSesion">Cerrar sesión</a></li>
-      </ul>
+      <div class="brand">Uni<span>Event</span></div>
+      <nav>
+        <ul>
+          <li><a href="dashboard.html">Solicitudes</a></li>
+          <li><a href="dashboard-calendar.html">Calendario</a></li>
+          <li class="active"><a href="dashboard-approved.html">Aprobadas</a></li>
+          <li><a href="dashboard-declined.html">Rechazadas</a></li>
+          <li><a href="dashboard-finished.html">Concluidas</a></li>
+          <li class="separator"></li>
+          <li><a href="dashboard-reports.html">Reportes</a></li>
+          <li><a href="dashboard-configuration.html">Configuración</a></li>
+        </ul>
+      </nav>
+      <div class="sidebar-end">
+        <a href="index.html" id="cerrarSesion" class="btn-logout">Cerrar sesión</a>
+      </div>
     </aside>
 
-    <main class="content" id="principalContent">
-      <h2>Solicitudes Aprobadas</h2>
-      <table id="applicationsTable" border="1">
-        <thead>
-          <tr>
-            <th>Responsable</th>
-            <th>Tipo de actividad</th>
-            <th>Actividad</th>
-            <th>Descripción</th>
-            <th>Fecha</th>
-            <th>Hora de Inicio</th>
-            <th>Lugar</th>
-            <th>Estado</th>
-          </tr>
-        </thead>
-        <tbody>
+    <main class="main-content">
+      <header class="page-header">
+        <div class="title-area">
+          <h1>Eventos Aprobados</h1>
+        </div>
+        <div class="actions-area">
+          <button class="btn-print" onclick="window.print()">🖨️ Imprimir Lista</button>
+        </div>
+      </header>
 
-        </tbody>
-      </table>
+      <section class="card-table">
+        <table id="applicationsTable">
+          <thead>
+            <tr>
+              <th>Responsable</th>
+              <th>Tipo de Evento</th>
+              <th>Título</th>
+              <th>Descripción</th>
+              <th>Fecha</th>
+              <th>Hora</th>
+              <th>Lugar</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
     </main>
   </div>
 </body>

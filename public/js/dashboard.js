@@ -11,7 +11,7 @@ const btnAdd = document.getElementById('fabAdd');
 async function updateFinishedRequests() {
     const requestsRef = collection(db, 'solicitudes');
     const q = query(requestsRef, where("state", "==", "Aceptada"));
-    
+
     try {
         const snapshot = await getDocs(q);
         const now = new Date();
@@ -23,12 +23,12 @@ async function updateFinishedRequests() {
         for (const docSnap of snapshot.docs) {
             const data = docSnap.data();
             const docId = docSnap.id;
-            
+
             const eventDate = data.date;
             const endTime = data.endTime;
 
             if (eventDate < nowString || (eventDate === nowString && endTime < nowTime)) {
-                
+
                 const docRef = doc(db, "solicitudes", docId);
                 await updateDoc(docRef, { state: "Concluida" });
                 updatedCount++;
@@ -137,46 +137,88 @@ document.addEventListener("click", async (e) => {
 });
 
 btnAdd.addEventListener('click', async () => {
-
     const { value: formValues } = await Swal.fire({
-        title: 'Crear Evento Directo',
-        html:
-            '<p class="swal-text">Este evento se registrará inmediatamente como <b>Aceptado</b>.</p>' +
-            '<input id="swal-title" class="swal2-input" placeholder="Nombre de la Actividad" required>' +
-            '<select id="swal-type" class="swal2-select" required>' +
-            '<option value="">Seleccione Tipo de Actividad</option>' +
-            '<option value="Conferencia">Conferencia</option>' +
-            '<option value="Taller">Taller</option>' +
-            '<option value="Curso">Curso</option>' +
-            '<option value="Junta">Junta / Reunión</option>' +
-            '</select>' +
-            '<input id="swal-description" class="swal2-input" placeholder="Descripción breve (Opcional)">' +
-            '<input id="swal-date" class="swal2-input" type="date" placeholder="Fecha (YYYY-MM-DD)" required>' +
-            '<input id="swal-start" class="swal2-input" type="time" placeholder="Hora de Inicio (HH:MM)" required>' +
-            '<input id="swal-end" class="swal2-input" type="time" placeholder="Hora de Fin (HH:MM)" required>' +
-            '<select id="swal-place" class="swal2-select" required>' +
-            '<option value="">Seleccione un espacio</option>' +
-            '<option value="Auditorio">Auditorio C.P.A. Josefine Góngora Espitia</option>' +
-            '<option value="Aula 1">Aula 1</option>' +
-            '<option value="Aula 2">Aula 2</option>' +
-            '<option value="Aula 3">Aula 3</option>' +
-            '<option value="Aula 4">Aula 4</option>' +
-            '<option value="Aula 5">Aula 5</option>' +
-            '<option value="Aula 6">Aula 6</option>' +
-            '<option value="Aula 7">Aula 9</option>' +
-            '<option value="Aula 8">Aula 10</option>' +
-            '<option value="Aula 9">Aula 11</option>' +
-            '<option value="Aula 10">Aula 12</option>' +
-            '<option value="Aula 11">Aula 13</option>' +
-            '<option value="Aula 12">Aula 14</option>' +
-            '<option value="Aula 13">Aula 15</option>' +
-            '<option value="Aula 14">Aula 16</option>' +
-            '<option value="Aula 15">Aula 17</option>' +
-            '<option value="Aula 16">Aula 18</option>' +
-            '<option value="Aula 17">Laboratorio de LIS</option>' +
-            '<option value="Aula 18">Laboratorio de LSCA</option>' +
-            '</select>',
+        title: 'Agendar Evento',
+        width: '1000px',
+        padding: '2rem',
+        background: '#ffffff',
+        html: `
+            <p class="swal-subtitle">Este evento se registrará automáticamente como <b>Aceptado</b>.</p>
+            <div class="swal-form-grid">
+                <div class="swal-column">
+                    <h4 class="swal-section-title"><span>1</span> Identificación</h4>
+                    <div class="swal-field">
+                        <label>Nombre de la Actividad</label>
+                        <input id="swal-title" class="swal-input-custom">
+                    </div>
+                    <div class="swal-field">
+                        <label>Tipo de Actividad</label>
+                        <select id="swal-type" class="swal-select-custom">
+                            <option value="">Seleccione tipo</option>
+                            <option value="Conferencia">Conferencia</option>
+                            <option value="Taller">Taller</option>
+                            <option value="Curso">Curso</option>
+                            <option value="Junta">Junta / Reunión</option>
+                        </select>
+                    </div>
+                </div>
 
+                <div class="swal-column">
+                    <h4 class="swal-section-title"><span>2</span> Detalles</h4>
+                    <div class="swal-field">
+                        <label>Descripción del Evento</label>
+                        <textarea id="swal-description" class="swal-textarea-custom" placeholder="Objetivo y audiencia..."></textarea>
+                    </div>
+                </div>
+
+                <div class="swal-column">
+                    <h4 class="swal-section-title"><span>3</span> Logística</h4>
+                    <div class="swal-field">
+                        <label>Fecha</label>
+                        <input id="swal-date" type="date" class="swal-input-custom">
+                    </div>
+                    <div class="swal-time-row">
+                        <div class="swal-field">
+                            <label>Inicio</label>
+                            <input id="swal-start" type="time" class="swal-input-custom">
+                        </div>
+                        <div class="swal-field">
+                            <label>Fin</label>
+                            <input id="swal-end" type="time" class="swal-input-custom">
+                        </div>
+                    </div>
+                    <div class="swal-field">
+                        <label>Espacio Académico</label>
+                        <select id="swal-place" class="swal-select-custom">
+                            <option value="">Seleccione el lugar</option>
+                                <option value="Auditorio">Auditorio C.P.A. Josefina Góngora Espitía</option>
+                                <option value="Aula 1">Aula 1</option>
+                                <option value="Aula 2">Aula 2</option>
+                                <option value="Aula 3">Aula 3</option>
+                                <option value="Aula 4">Aula 4</option>
+                                <option value="Aula 5">Aula 5</option>
+                                <option value="Aula 6">Aula 6</option>
+                                <option value="Aula 9">Aula 9</option>
+                                <option value="Aula 10">Aula 10</option>
+                                <option value="Aula 11">Aula 11</option>
+                                <option value="Aula 12">Aula 12</option>
+                                <option value="Aula 13">Aula 13</option>
+                                <option value="Aula 14">Aula 14</option>
+                                <option value="Aula 15">Aula 15</option>
+                                <option value="Aula 16">Aula 16</option>
+                                <option value="Aula 17">Aula 17</option>
+                                <option value="Aula 18">Aula 18</option>
+                                <option value="Aula 19">Laboratorio de LIS</option>
+                                <option value="Aula 20">Laboratorio de LSCA</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        `,
+        showCancelButton: true,
+        confirmButtonText: 'Confirmar y Agendar',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#2563eb',
         preConfirm: () => {
             const activityName = document.getElementById('swal-title').value;
             const activityType = document.getElementById('swal-type').value;
@@ -185,20 +227,42 @@ btnAdd.addEventListener('click', async () => {
             const startTime = document.getElementById('swal-start').value;
             const endTime = document.getElementById('swal-end').value;
             const place = document.getElementById('swal-place').value;
-            
+
+            // 1. Validación de campos obligatorios
             if (!activityName || !activityType || !date || !startTime || !endTime || !place) {
                 Swal.showValidationMessage('Por favor, completa todos los campos requeridos.');
                 return false;
             }
+
+            // 2. Validación de fin de semana (Sábado=5, Domingo=6 en getDay con ajuste UTC o local)
+            const selectedDate = new Date(date + "T00:00:00");
+            const dayOfWeek = selectedDate.getDay();
+            if (dayOfWeek === 0 || dayOfWeek === 6) {
+                Swal.showValidationMessage('No se pueden agendar eventos en fines de semana.');
+                return false;
+            }
+
+            // 3. Validación de rango horario (07:00 a 20:00)
+            const startHour = parseInt(startTime.split(":")[0]);
+            const endHour = parseInt(endTime.split(":")[0]);
+
+            if (startHour < 7 || endHour > 20 || (endHour === 20 && parseInt(endTime.split(":")[1]) > 0)) {
+                Swal.showValidationMessage('El horario permitido es de 07:00 AM a 08:00 PM.');
+                return false;
+            }
+
+            // 4. Validación lógica de tiempo
             if (startTime >= endTime) {
-                Swal.showValidationMessage('La hora de inicio debe ser anterior a la hora de fin.');
+                Swal.showValidationMessage('La hora de inicio debe ser anterior a la de fin.');
                 return false;
             }
 
             return { activityName, activityType, description, date, startTime, endTime, place };
         }
     });
+
     if (formValues) {
+        // Ejecución del guardado en Firebase...
         Swal.fire({
             title: 'Registrando Evento...',
             allowOutsideClick: false,
@@ -223,16 +287,11 @@ btnAdd.addEventListener('click', async () => {
                 reminderSent: false
             });
 
-            Swal.fire('¡Éxito!', 'El evento ha sido registrado y aprobado directamente.', 'success')
-                .then((result) => {
-                    if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
-                        location.reload();
-                    }
-                });
+            Swal.fire('¡Éxito!', 'El evento ha sido registrado y aprobado.', 'success')
+                .then(() => location.reload());
 
         } catch (error) {
-            console.error("Error al crear el evento directo:", error);
-            Swal.fire('Error', 'Hubo un problema al guardar el evento. Intenta de nuevo.', 'error');
+            Swal.fire('Error', 'Hubo un problema al guardar.', 'error');
         }
     }
 });

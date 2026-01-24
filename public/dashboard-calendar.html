@@ -1,36 +1,50 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-  <meta charset="UTF-8">
-  <title>Calendario de Actividades</title>
-  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script type="module" src="js/firebaseConfig.js"></script>
-  <link rel="stylesheet" href="./css/calendarStyle.css">
-  <script type="module" src="./js/calendar.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendario de Actividades - UniEvent</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./css/dashboardCalendarStyle.css">
 </head>
-
 <body>
 
-  <main>
-    <aside class="sidebar">
-      <h3>Menú</h3>
-      <ul>
-        <li><a href="dashboard.html">Solicitudes</a></li>
-        <li><a href="dashboard-calendar.html">Calendario</a></li>
-        <li><a href="dashboard-approved.html">Aprobadas</a></li>
-        <li><a href="dashboard-declined.html">Rechazadas</a></li>
-        <li><a href="dashboard-finished.html">Concluidas</a></li>
-        <li><a href="dashboard-reports.html">Reportes</a></li>
-        <li><a href="dashboard-configuration.html">Configuración</a></li>
-        <li><a href="index.html" id="cerrarSesion">Cerrar sesión</a></li>
-      </ul>
-    </aside>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="brand">Uni<span>Event</span></div>
+            <nav>
+                <ul>
+                    <li><a href="dashboard.html">Solicitudes</a></li>
+                    <li class="active"><a href="dashboard-calendar.html">Calendario</a></li>
+                    <li><a href="dashboard-approved.html">Aprobadas</a></li>
+                    <li><a href="dashboard-declined.html">Rechazadas</a></li>
+                    <li><a href="dashboard-finished.html">Concluidas</a></li>
+                    <li class="separator"></li>
+                    <li><a href="dashboard-reports.html">Reportes</a></li>
+                    <li><a href="dashboard-configuration.html">Configuración</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-end">
+                <a href="index.html" id="cerrarSesion" class="btn-logout">Cerrar sesión</a>
+            </div>
+        </aside>
 
-    <div id="calendar"></div>
-  </main>
+        <main class="main-content">
+            <header class="calendar-header">
+                <h1>Calendario de Eventos</h1>
+                <p>Visualización de eventos confirmados y ocupación de espacios.</p>
+            </header>
+            
+            <div class="calendar-card">
+                <div id="calendar"></div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="module" src="js/firebaseConfig.js"></script>
+    <script type="module" src="./js/calendar.js"></script>
 </body>
-
 </html>
