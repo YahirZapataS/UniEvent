@@ -41,11 +41,11 @@ onAuthStateChanged(auth, async (user) => {
         return;
     }
 
-    const currentPath = window.location.pathname;
-    
-    if (currentPath.includes("dashboard-approved.html")) {
+    const currentPath = window.location.pathname.toLowerCase();
+
+    if (currentPath.includes("dashboard-approved")) {
         loadRequestsByStatus("Aceptada");
-    } else if (currentPath.includes("dashboard-declined.html")) {
+    } else if (currentPath.includes("dashboard-declined")) {
         loadRequestsByStatus("Rechazada");
     }
 });

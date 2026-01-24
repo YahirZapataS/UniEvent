@@ -2,7 +2,7 @@
 :root {
     --primary: #2563eb;
     --primary-dark: #1e40af;
-    --sidebar-bg: #0f172a;
+    --dark-bg: #0f172a;
     --bg-main: #f8fafc;
     --text-main: #1e293b;
     --text-muted: #64748b;
@@ -14,28 +14,16 @@
     --danger-text: #991b1b;
 }
 
-* { 
-    box-sizing: border-box; 
-    margin: 0; 
-    padding: 0; 
-    font-family: 'Inter', sans-serif; 
-}
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
 
-body { 
-    background-color: var(--bg-main); 
-    color: var(--text-main); 
-    min-height: 100vh;
-}
+body { background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; }
 
-.dashboard-layout { 
-    display: flex; 
-    min-height: 100vh; 
-}
+.dashboard-container { display: flex; min-height: 100vh; }
 
-/* --- Sidebar Fija (Consistente) --- */
+/* --- Sidebar (Idéntica a Aprobados/Rechazados) --- */
 .sidebar {
     width: 260px;
-    background-color: var(--sidebar-bg);
+    background-color: var(--dark-bg);
     color: white;
     display: flex;
     flex-direction: column;
@@ -45,112 +33,54 @@ body {
     z-index: 100;
 }
 
-.sidebar-logo {
-    font-size: 1.5rem;
-    font-weight: 800;
-    margin-bottom: 2rem;
-    padding-left: 1rem;
-}
-.sidebar-logo span { color: var(--primary); }
+.brand { font-size: 1.5rem; font-weight: 800; margin-bottom: 2rem; padding-left: 1rem; }
+.brand span { color: var(--primary); }
 
-.sidebar-nav ul { list-style: none; }
-.sidebar-nav li { margin-bottom: 0.4rem; }
+.sidebar ul { list-style: none; }
+.sidebar li { margin-bottom: 0.4rem; }
+.sidebar li.separator { height: 1px; background: rgba(255,255,255,0.1); margin: 1.2rem 0; }
 
-.sidebar-nav a {
+.sidebar a {
     color: #94a3b8;
     text-decoration: none;
     padding: 0.8rem 1rem;
     display: block;
     border-radius: 0.6rem;
     font-size: 0.9rem;
-    transition: all 0.2s;
+    transition: all 0.2s ease;
 }
 
-.sidebar-nav li.active a, 
-.sidebar-nav a:hover {
+.sidebar li.active a, .sidebar a:hover {
     background-color: rgba(255, 255, 255, 0.1);
     color: white;
 }
 
-.nav-divider { 
-    height: 1px; 
-    background: rgba(255,255,255,0.1); 
-    margin: 1.2rem 0; 
-}
-
-.logout-btn {
+.btn-logout {
     margin-top: auto;
-    color: #fca5a5 !important; /* Tono rojizo suave */
+    color: #fca5a5 !important;
+    text-align: center;
+    border: 1px solid rgba(252, 165, 165, 0.2);
+    padding: 0.8rem;
+    border-radius: 0.6rem;
     text-decoration: none;
     font-size: 0.9rem;
-    padding: 0.8rem;
-    border: 1px solid rgba(252, 165, 165, 0.2); /* Borde sutil */
-    border-radius: 0.6rem;
-    text-align: center;
-    transition: all 0.2s ease;
-    display: block; /* Asegura que ocupe el ancho disponible */
+    transition: all 0.2s;
 }
 
-.logout-btn:hover {
-    background: rgba(252, 165, 165, 0.1);
-}
+.btn-logout:hover { background: rgba(252, 165, 165, 0.1); }
 
-/* --- Contenido Principal (con margen para la sidebar) --- */
-.main-content { 
-    margin-left: 260px; 
-    flex-grow: 1; 
-    padding: 2.5rem 3rem; 
-}
+/* --- Área de Contenido --- */
+.main-content { margin-left: 260px; flex-grow: 1; padding: 3rem; }
 
-.content-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2.5rem;
-}
+.page-header { margin-bottom: 2.5rem; }
+.page-header h1 { font-size: 1.75rem; font-weight: 800; color: #0f172a; }
+.page-header p { color: var(--text-muted); font-size: 0.95rem; }
 
-.header-text h1 { 
-    font-size: 1.75rem; 
-    font-weight: 800;
-    margin-bottom: 0.3rem; 
-}
-.header-text p { 
-    color: var(--text-muted); 
-    font-size: 0.95rem;
-}
-
-/* --- KPIs / Stats --- */
-.stats-grid { display: flex; gap: 1.5rem; }
-
-.stat-card {
-    background: var(--white);
-    padding: 1.25rem 2rem;
-    border-radius: 1rem;
-    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-    text-align: center;
-    min-width: 140px;
-    border: 1px solid var(--border);
-}
-
-.stat-label { 
-    display: block; 
-    font-size: 0.75rem; 
-    color: var(--text-muted); 
-    font-weight: 700; 
-    text-transform: uppercase;
-    margin-bottom: 0.5rem;
-}
-.stat-value { 
-    font-size: 1.75rem; 
-    font-weight: 800; 
-    color: var(--primary); 
-}
-
-/* --- Tabla --- */
-.table-container {
+/* --- Tabla (Estilo Refinado de Aprobados) --- */
+.card-table {
     background: var(--white);
     border-radius: 1rem;
-    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     overflow: hidden;
     border: 1px solid var(--border);
 }
@@ -161,10 +91,7 @@ body {
     background-color: #fcfcfd;
 }
 
-.table-header h2 {
-    font-size: 1.1rem;
-    font-weight: 700;
-}
+.table-header h2 { font-size: 1.1rem; font-weight: 700; color: var(--text-main); }
 
 table { width: 100%; border-collapse: collapse; }
 
@@ -175,18 +102,14 @@ th {
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    padding: 1rem 1.5rem;
+    padding: 1.2rem 1rem;
     text-align: left;
     border-bottom: 1px solid var(--border);
 }
 
-td { 
-    padding: 1.2rem 1.5rem; 
-    border-bottom: 1px solid var(--border); 
-    font-size: 0.9rem; 
-}
+td { padding: 1.2rem 1rem; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
 
-tbody tr:hover { background-color: #f8fafc; }
+tbody tr:hover { background-color: #fcfcfd; }
 
 /* Botones de Acción Semánticos */
 .aprobar, .rechazar {
@@ -199,26 +122,11 @@ tbody tr:hover { background-color: #f8fafc; }
     transition: all 0.2s;
 }
 
-.aprobar { 
-    background-color: var(--success-bg); 
-    color: var(--success-text); 
-    margin-right: 0.6rem; 
-}
+.aprobar { background-color: var(--success-bg); color: var(--success-text); margin-right: 0.6rem; }
+.aprobar:hover { background-color: #bbf7d0; transform: translateY(-1px); }
 
-.aprobar:hover {
-    background-color: #bbf7d0;
-    transform: translateY(-1px);
-}
-
-.rechazar { 
-    background-color: var(--danger-bg); 
-    color: var(--danger-text); 
-}
-
-.rechazar:hover {
-    background-color: #fecaca;
-    transform: translateY(-1px);
-}
+.rechazar { background-color: var(--danger-bg); color: var(--danger-text); }
+.rechazar:hover { background-color: #fecaca; transform: translateY(-1px); }
 
 /* --- FAB (Botón Flotante) --- */
 .fab {
@@ -232,7 +140,6 @@ tbody tr:hover { background-color: #f8fafc; }
     border: none;
     border-radius: 50%;
     font-size: 1.8rem;
-    font-weight: 400;
     box-shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.4);
     cursor: pointer;
     transition: all 0.3s;
@@ -241,98 +148,22 @@ tbody tr:hover { background-color: #f8fafc; }
     justify-content: center;
 }
 
-.fab:hover {
-    background-color: var(--primary-dark);
-    transform: scale(1.1) rotate(90deg);
-}
+.fab:hover { background-color: var(--primary-dark); transform: scale(1.1); }
 
-/* --- Estilos para el Modal Flotante (SweetAlert) --- */
-
-.swal-subtitle {
-    color: var(--text-muted);
-    margin-bottom: 2rem;
-    font-size: 0.95rem;
-}
-
-.swal-form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1.2fr 1fr; /* 3 Columnas */
-    gap: 25px;
-    text-align: left;
-}
-
-.swal-column {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.swal-section-title {
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    color: var(--primary);
-    font-weight: 800;
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.swal-section-title span {
-    background: var(--primary);
-    color: white;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.7rem;
-}
-
-.swal-field {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-.swal-field label {
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: var(--text-muted);
-}
-
-.swal-input-custom, 
-.swal-select-custom, 
-.swal-textarea-custom {
-    width: 100%;
-    padding: 10px 12px;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    background: #f8fafc;
-}
-
-.swal-textarea-custom {
-    height: 100%;
-    min-height: 180px;
-    resize: none;
-}
-
-.swal-time-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-}
-
-/* Eliminar estilos por defecto de SweetAlert que estorben */
-.swal2-html-container {
-    overflow-x: hidden !important;
-}
+/* --- Estilos para el Modal Flotante --- */
+.swal-subtitle { color: var(--text-muted); margin-bottom: 2rem; font-size: 0.95rem; }
+.swal-form-grid { display: grid; grid-template-columns: 1fr 1.2fr 1fr; gap: 25px; text-align: left; }
+.swal-column { display: flex; flex-direction: column; gap: 15px; }
+.swal-section-title { font-size: 0.85rem; text-transform: uppercase; color: var(--primary); font-weight: 800; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+.swal-section-title span { background: var(--primary); color: white; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; }
+.swal-field { display: flex; flex-direction: column; gap: 5px; }
+.swal-field label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); }
+.swal-input-custom, .swal-select-custom, .swal-textarea-custom { width: 100%; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 0.9rem; background: #f8fafc; }
+.swal-textarea-custom { height: 100%; min-height: 180px; resize: none; }
+.swal-time-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
 /* Responsive */
-@media (max-width: 1024px) {
-    .sidebar { width: 80px; padding: 1rem; }
-    .sidebar-logo, .sidebar-nav a span, .logout-btn, .brand span { display: none; }
-    .main-content { margin-left: 80px; padding: 1.5rem; }
+@media (max-width: 850px) {
+    .sidebar { display: none; }
+    .main-content { margin-left: 0; padding: 1.5rem; }
 }

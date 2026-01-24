@@ -4,79 +4,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel - Gestor</title>
+    <title>Panel de Gestión - UniEvent</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.8/dist/sweetalert2.all.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.8/dist/sweetalert2.min.css" rel="stylesheet">
     <link rel="stylesheet" href="./css/dashboardStyle.css">
-    <script type="module" src="./js/dashboard.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="module">
         (function () {
             emailjs.init("IyDvp3Qr5cKPcCyWS");
         })();
     </script>
-    <script type="module" src="js/dashboard.js"></script>
+    <script type="module" src="./js/dashboard.js"></script>
 </head>
 
 <body>
-    <div class="dashboard-layout">
+    <div class="dashboard-container">
         <aside class="sidebar">
-            <div class="sidebar-logo">
-                Uni<span>Event</span>
-            </div>
-            <nav class="sidebar-nav">
+            <div class="brand">Uni<span>Event</span></div>
+            <nav>
                 <ul>
                     <li class="active"><a href="dashboard.html">Solicitudes</a></li>
                     <li><a href="dashboard-calendar.html">Calendario</a></li>
                     <li><a href="dashboard-approved.html">Aprobadas</a></li>
                     <li><a href="dashboard-declined.html">Rechazadas</a></li>
                     <li><a href="dashboard-finished.html">Concluidas</a></li>
-                    <div class="nav-divider"></div>
+                    <li class="separator"></li>
                     <li><a href="dashboard-reports.html">Reportes</a></li>
                     <li><a href="dashboard-configuration.html">Configuración</a></li>
                 </ul>
             </nav>
-            <div class="sidebar-footer">
-                <a href="index.html" class="logout-btn">Cerrar sesión</a>
+            <div class="sidebar-end">
+                <a href="index.html" id="cerrarSesion" class="btn-logout">Cerrar sesión</a>
             </div>
         </aside>
 
         <main class="main-content">
-            <header class="content-header">
-                <div class="header-text">
+            <header class="page-header">
+                <div class="title-area">
                     <h1>Panel de Gestión</h1>
-                    <p>Bienvenido(a)</p>
+                    <p>Bienvenido(a) al sistema de control de solicitudes.</p>
                 </div>
             </header>
 
-            <section class="table-container">
+            <section class="card-table">
                 <div class="table-header">
                     <h2>Solicitudes Pendientes</h2>
                 </div>
-                <div class="scrollable-table">
-                    <table id="applicationsTable">
-                        <thead>
-                            <tr>
-                                <th>Responsable</th>
-                                <th>Tipo de evento</th>
-                                <th>Actividad</th>
-                                <th>Descripción</th>
-                                <th>Fecha</th>
-                                <th>Hora de inicio</th>
-                                <th>Hora de termino</th>
-                                <th>Lugar</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                <table id="applicationsTable">
+                    <thead>
+                        <tr>
+                            <th>Responsable</th>
+                            <th>Tipo de evento</th>
+                            <th>Actividad</th>
+                            <th>Descripción</th>
+                            <th>Fecha</th>
+                            <th>Inicio</th>
+                            <th>Término</th>
+                            <th>Lugar</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                         </tbody>
-                    </table>
-                </div>
+                </table>
             </section>
         </main>
 
         <button id="fabAdd" class="fab" title="Nueva Solicitud">+</button>
     </div>
 </body>
-
 </html>
