@@ -1,12 +1,13 @@
 {
   "firestore": {
-    "database": "(default)",
+    "database": "unieventbd",
     "location": "nam5",
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
   },
   "hosting": {
     "public": "public",
+    "cleanUrls": true,
     "ignore": [
       "firebase.json",
       "**/.*",

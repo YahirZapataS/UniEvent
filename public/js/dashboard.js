@@ -108,7 +108,7 @@ document.addEventListener("click", async (e) => {
             const requestSnap = await getDoc(requestRef);
 
             if (!requestSnap.exists()) {
-                throw newError("La solicitud no existe.");
+                throw new Error("La solicitud no existe.");
             }
 
             await updateDoc(requestRef, { state: newState });
