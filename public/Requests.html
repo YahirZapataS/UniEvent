@@ -90,10 +90,6 @@
                             <h2>Logística</h2>
                         </div>
                         <div class="input-group">
-                            <label for="date">Fecha del evento</label>
-                            <input type="date" id="date" required>
-                        </div>
-                        <div class="input-group">
                             <label for="place">Lugar</label>
                             <select id="place" required>
                                 <option value="">Seleccione el lugar</option>
@@ -118,29 +114,39 @@
                                 <option value="Aula 20">Laboratorio de LSCA</option>
                             </select>
                         </div>
+                        <div class="input-group">
+                            <label for="date">Fecha</label>
+                            <input type="text" id="date" placeholder="Selecciona fecha" readonly required>
+                        </div>
                         <div class="time-grid">
                             <div class="input-group">
                                 <label for="startTime">Inicio</label>
-                                <input type="time" id="startTime" required>
+                                <select id="startTime" required>
+                                    <option value="">Hora Inicio</option>
+                                </select>
                             </div>
                             <div class="input-group">
                                 <label for="endTime">Fin</label>
-                                <input type="time" id="endTime" required>
+                                <select id="endTime" required>
+                                    <option value="">Hora Fin</option>
+                                </select>
                             </div>
                         </div>
-                        <div class="input-group expand">
-                            <label for="comments">Comentarios (Opcional)</label>
-                            <textarea id="comments" placeholder="Notas adicionales..."></textarea>
-                        </div>
-                    </section>
                 </div>
-
-                <div class="form-footer">
-                    <button type="button" id="btnBack" class="btn-secondary">Regresar</button>
-                    <button type="submit" class="btn-primary">Enviar Solicitud</button>
+                <div class="input-group expand">
+                    <label for="comments">Comentarios (Opcional)</label>
+                    <textarea id="comments" placeholder="Notas adicionales..."></textarea>
                 </div>
-            </form>
+                </section>
         </div>
+
+        <div class="form-footer">
+            <button type="button" id="btnBack" class="btn-secondary">Regresar</button>
+            <button type="submit" class="btn-primary">Enviar Solicitud</button>
+        </div>
+        </form>
+        <button id="btnHelp" class="fab-help" title="Guía de uso">i</button>
+    </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>

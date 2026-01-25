@@ -13,29 +13,39 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Inter', sans-serif;
+    font-family: "Inter", sans-serif;
 }
 
-html, body {
+/* --- Ajuste para permitir Scroll --- */
+html,
+body {
     height: 100%;
     width: 100%;
-    overflow: hidden; 
+    overflow-y: auto; /* Cambiado de hidden a auto para permitir scroll */
     background-color: var(--bg-page);
 }
 
 body {
     display: flex;
-    align-items: center;
+    align-items: flex-start; /* Cambiado de center para que el scroll empiece arriba */
     justify-content: center;
+    padding: 2rem 0;
 }
 
-/* --- Contenedor Principal --- */
 .main-container {
     width: 95%;
     max-width: 1200px;
-    height: 92vh; /* Un poco más alto para aprovechar el espacio */
+    height: auto; /* Cambiado de 92vh para que crezca con el contenido */
     display: flex;
     flex-direction: column;
+}
+
+/* Contenedor de fechas con scroll interno opcional */
+#datesContainer {
+    max-height: 400px; /* Limita el tamaño antes de scrollear internamente */
+    overflow-y: auto;
+    padding-right: 10px;
+    margin-bottom: 1rem;
 }
 
 .form-header {
@@ -43,7 +53,11 @@ body {
     margin-bottom: 1.5rem;
 }
 
-.form-header h1 { font-size: 1.8rem; color: var(--text-dark); font-weight: 800; }
+.form-header h1 {
+    font-size: 1.8rem;
+    color: var(--text-dark);
+    font-weight: 800;
+}
 
 /* --- Tarjeta Expandida --- */
 .form-card {
@@ -51,7 +65,7 @@ body {
     padding: 2.5rem;
     border-radius: 1.25rem;
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
-    flex-grow: 1; 
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
 }
@@ -67,7 +81,8 @@ form {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 3rem;
-    flex-grow: 1; /* Esto empuja las columnas a ocupar el espacio vacío */
+    flex-grow: 1;
+    /* Esto empuja las columnas a ocupar el espacio vacío */
     align-items: stretch;
 }
 
@@ -88,20 +103,23 @@ form {
 
 /* --- Espaciado entre grupos --- */
 .input-group {
-    margin-bottom: 1.5rem; /* Aumentado para separar elementos */
+    margin-bottom: 1.5rem;
+    /* Aumentado para separar elementos */
     display: flex;
     flex-direction: column;
 }
 
 /* --- Expansión de Textareas --- */
 .input-group.expand {
-    flex-grow: 1; /* Hace que el textarea ocupe el espacio sobrante en su columna */
+    flex-grow: 1;
+    /* Hace que el textarea ocupe el espacio sobrante en su columna */
 }
 
-textarea#description, 
+textarea#description,
 textarea#comments {
-    flex-grow: 1; 
-    min-height: 100px; /* Asegura un tamaño base */
+    flex-grow: 1;
+    min-height: 100px;
+    /* Asegura un tamaño base */
 }
 
 label {
@@ -112,7 +130,9 @@ label {
     margin-bottom: 0.5rem;
 }
 
-input, select, textarea {
+input,
+select,
+textarea {
     width: 100%;
     padding: 0.8rem 1rem;
     font-size: 0.9rem;
@@ -147,12 +167,254 @@ button {
     border: none;
 }
 
-.btn-primary { background: var(--primary); color: var(--white); }
-.btn-secondary { background: #f1f5f9; color: var(--text-muted); }
+.btn-primary {
+    background: var(--primary);
+    color: var(--white);
+}
+
+.btn-secondary {
+    background: #f1f5f9;
+    color: var(--text-muted);
+}
+
+/* Colores de disponibilidad */
+.availability-green {
+    background-color: #dcfce7 !important;
+    color: #166534 !important;
+}
+
+.availability-yellow {
+    background-color: #fef9c3 !important;
+    color: #854d0e !important;
+}
+
+.availability-red {
+    background-color: #fee2e2 !important;
+    color: #991b1b !important;
+}
+
+/* Asegurar que los días deshabilitados (pasados/fines de semana) 
+   mantengan su apariencia visual de bloqueo */
+.flatpickr-day.flatpickr-disabled,
+.flatpickr-day.flatpickr-disabled:hover {
+    background: transparent !important;
+    color: #cbd5e1 !important;
+    /* Gris claro */
+    cursor: not-allowed;
+}
+
+/* --- Estilización de los nuevos Selectores de Tiempo --- */
+
+.time-grid select {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    font-size: 0.9rem;
+    border: 1px solid var(--border);
+    border-radius: 0.6rem;
+    background-color: #f8fafc;
+    color: var(--text-dark);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    /* Elimina la apariencia por defecto en algunos navegadores */
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1rem;
+}
+
+/* Efecto al hacer clic o tabulación */
+.time-grid select:focus {
+    outline: none;
+    border-color: var(--primary);
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Estado deshabilitado o vacío */
+.time-grid select:disabled {
+    background-color: #f1f5f9;
+    color: #94a3b8;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* --- Ajuste de la cuadrícula de tiempo --- */
+.time-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    align-items: end;
+    /* Alinea los selects con sus etiquetas */
+}
+
+/* Nota informativa opcional (puedes añadirla en el HTML si gustas) */
+.time-helper-text {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-top: 0.4rem;
+    font-style: italic;
+    grid-column: span 2;
+}
+
+/* Botón Flotante de Ayuda */
+.fab-help {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    /* Movido a la derecha */
+    width: 55px;
+    height: 55px;
+    background-color: var(--text-muted);
+    color: white;
+    border: none;
+    border-radius: 50%;
+
+    /* Centrado perfecto de la letra/icono */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 1.6rem;
+    font-family: 'serif';
+    /* Una fuente con serifa hace que la 'i' se vea como icono */
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 1000;
+}
+
+.fab-help:hover {
+    background-color: var(--primary);
+    transform: scale(1.1) rotate(10deg);
+    /* Pequeña rotación al pasar el mouse */
+}
+
+/* Estilos para el contenido de la ayuda en SweetAlert */
+.help-container {
+    text-align: left;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    padding: 0 10px;
+}
+
+.help-section {
+    margin-bottom: 1.5rem;
+}
+
+.help-section h4 {
+    color: var(--primary);
+    margin-bottom: 0.8rem;
+    border-bottom: 2px solid #f1f5f9;
+    padding-bottom: 0.3rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.nom-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+    padding: 5px;
+    border-radius: 8px;
+}
+
+.dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* Animación de aparición */
+@keyframes bounceIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.3) translateY(100px);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.05) translateY(-10px);
+    }
+
+    70% {
+        transform: scale(0.9) translateY(5px);
+    }
+
+    100% {
+        transform: scale(1) translateY(0);
+    }
+}
+
+.fab-help {
+    /* ... (tus estilos anteriores) ... */
+    animation: bounceIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Estilo para los iconos dentro del modal */
+.help-section h4 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.1rem;
+}
+
+.card-mini {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    padding: 1.2rem;
+    border-radius: 0.8rem;
+    margin-bottom: 1rem;
+    position: relative;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.btn-remove-date {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #fee2e2;
+    color: #ef4444;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+
+.btn-remove-date:hover {
+    background: #fecaca;
+}
 
 /* Responsive */
 @media (max-width: 850px) {
-    html, body { overflow-y: auto; height: auto; }
-    .main-container { height: auto; padding: 20px 0; }
-    .form-columns { grid-template-columns: 1fr; }
+
+    html,
+    body {
+        overflow-y: auto;
+        height: auto;
+    }
+
+    .main-container {
+        height: auto;
+        padding: 20px 0;
+    }
+
+    .form-columns {
+        grid-template-columns: 1fr;
+    }
 }
