@@ -8,6 +8,13 @@ const table = document.querySelector('#applicationsTable tbody');
 const btnClose = document.getElementById('cerrarSesion');
 const btnAdd = document.getElementById('fabAdd');
 
+export const formatDateSpanish = (dateStr) => {
+    if (!dateStr) return "Sin fecha";
+    const [year, month, day] = dateStr.split("-");
+    const date = new Date(year, month - 1, day);
+    return date.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
+};
+
 async function updateFinishedRequests() {
     const requestsRef = collection(db, 'solicitudes');
     const q = query(requestsRef, where("state", "==", "Aceptada"));
@@ -45,10 +52,7 @@ async function updateFinishedRequests() {
 }
 
 onAuthStateChanged(auth, async (user) => {
-    if (!user) {
-        window.location.href = 'index.html';
-        return;
-    }
+    if (!user) { window.location.href = 'index.html'; return; }
 
     await updateFinishedRequests();
 
@@ -56,13 +60,15 @@ onAuthStateChanged(auth, async (user) => {
     const q = query(
         requestsRef,
         where("state", "==", "Pendiente"),
-        orderBy('registerDate', 'desc'),
+        orderBy('date', 'asc'),
         orderBy('startTime', 'asc')
     );
+
     const snapshot = await getDocs(q);
+    table.innerHTML = "";
 
     if (snapshot.empty) {
-        table.innerHTML = `<tr><td colspan="7">No hay solicitudes pendientes</td></tr>`;
+        table.innerHTML = `<tr><td colspan="9">No hay solicitudes pendientes</td></tr>`;
         return;
     }
 
@@ -71,19 +77,19 @@ onAuthStateChanged(auth, async (user) => {
         const row = document.createElement("tr");
 
         row.innerHTML = `
-        <td>${data.name}</td>
-        <td>${data.activityType}</td>
-        <td>${data.activityName}</td>
-        <td>${data.description}</td>
-        <td>${data.date}</td>
-        <td>${data.startTime}</td>
-        <td>${data.endTime}</td>
-        <td>${data.place}</td>
-        <td>
-        <button data-id="${docSnap.id}" class="aprobar">Aceptar</button>
-        <button data-id="${docSnap.id}" class="rechazar">Rechazar</button>
-        </td>
-    `;
+            <td>${data.name}</td>
+            <td>${data.activityType}</td>
+            <td>${data.activityName}</td>
+            <td>${data.description}</td>
+            <td>${formatDateSpanish(data.date)}</td>
+            <td>${data.startTime}</td>
+            <td>${data.endTime}</td>
+            <td>${data.place}</td>
+            <td class="actions">
+                <button data-id="${docSnap.id}" class="aprobar">Aceptar</button>
+                <button data-id="${docSnap.id}" class="rechazar">Rechazar</button>
+            </td>
+        `;
         table.appendChild(row);
     });
 });
