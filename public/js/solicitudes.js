@@ -2,7 +2,7 @@ import { db } from "./firebaseConfig.js";
 import { collection, addDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const ADMIN_EMAIL = "kroblero@uv.mx";
-const EMAILJS_SERVICE_ID_NEW = "service_jhvkojp";
+const EMAILJS_SERVICE_ID_NEW = "service_r39dndx";
 const EMAILJS_TEMPLATE_ID_NEW = "template_547yaif";
 
 const form = document.getElementById("formSolicitud");
@@ -77,7 +77,7 @@ async function preloadMonthAvailability(dateObj, place) {
     }
 }
 
-// --- LÓGICA DE HORARIOS DINÁMICOS ---
+// --- LÓGICA DE HORARIOS DINÁMICOS (SIN BUFFER) ---
 async function updateAvailableStartTimes() {
     const date = dateInput.value;
     const place = placeInput.value;
@@ -94,17 +94,18 @@ async function updateAvailableStartTimes() {
         const START_LIMIT = 480; // 08:00 AM
         const END_LIMIT = 1200;  // 08:00 PM
         const STEP = 30;
-        const BUFFER = 30;
         const MIN_DURATION = 60;
 
         let optionsHtml = '<option value="">Hora Inicio</option>';
         for (let time = START_LIMIT; time < END_LIMIT; time += STEP) {
-            const isOccupied = occupied.some(slot => time >= slot.start && time < (slot.end + BUFFER));
+            // Se eliminó el BUFFER de la validación de ocupación
+            const isOccupied = occupied.some(slot => time >= slot.start && time < slot.end);
+            
             if (!isOccupied) {
                 let limitForThisSlot = END_LIMIT;
                 occupied.forEach(slot => {
-                    if (slot.start > time && (slot.start - BUFFER) < limitForThisSlot) {
-                        limitForThisSlot = slot.start - BUFFER;
+                    if (slot.start > time && slot.start < limitForThisSlot) {
+                        limitForThisSlot = slot.start; // El límite es exactamente el inicio del siguiente evento
                     }
                 });
                 if ((limitForThisSlot - time) >= MIN_DURATION) {
@@ -127,7 +128,6 @@ async function updateAvailableEndTimes() {
     const date = dateInput.value;
     const place = placeInput.value;
     const STEP = 30;
-    const BUFFER = 30;
     const MIN_DURATION = 60;
     const END_LIMIT = 1200;
 
@@ -137,8 +137,9 @@ async function updateAvailableEndTimes() {
 
     let limitForEnd = END_LIMIT;
     occupied.forEach(slot => {
-        if (slot.start > startMinutes && (slot.start - BUFFER) < limitForEnd) {
-            limitForEnd = slot.start - BUFFER;
+        // Se eliminó el BUFFER para permitir que el fin coincida con el inicio del siguiente
+        if (slot.start > startMinutes && slot.start < limitForEnd) {
+            limitForEnd = slot.start;
         }
     });
 
@@ -182,9 +183,7 @@ form.addEventListener("submit", async (e) => {
     Swal.fire({ title: 'Enviando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
 
     const formData = {
-        title: document.getElementById('tituloPersona').value,
         name: document.getElementById("name").value,
-        cargo: document.getElementById('puestoTrabajo').value,
         activityType: document.getElementById("activityType").value,
         activityName: document.getElementById("activityName").value,
         description: document.getElementById("description").value,
@@ -202,7 +201,7 @@ form.addEventListener("submit", async (e) => {
         await addDoc(collection(db, "solicitudes"), formData);
         await emailjs.send(EMAILJS_SERVICE_ID_NEW, EMAILJS_TEMPLATE_ID_NEW, {
             to_email: ADMIN_EMAIL,
-            responsible_name: `${formData.title} ${formData.name}`,
+            responsible_name: `${formData.name}`,
             activity_title: formData.activityName,
             request_date: formData.date,
             request_time: `${formData.startTime} - ${formData.endTime}`,
@@ -215,52 +214,61 @@ form.addEventListener("submit", async (e) => {
     }
 });
 
+// --- GUÍA DE RESERVACIÓN ---
 if (btnHelp) {
     btnHelp.addEventListener('click', () => {
         Swal.fire({
-            title: '<span style="color: #2563eb; font-weight: 800;">Guía de Reservación</span>',
+            title: '<span style="color: #2563eb; font-weight: 800; font-size: 1.6rem;">Manual de Reservación</span>',
+            width: '650px',
+            padding: '2rem',
+            background: '#ffffff',
+            confirmButtonText: 'Entendido',
+            confirmButtonColor: '#2563eb',
             html: `
-                <div style="text-align: left; font-family: 'Inter', sans-serif; color: #1e293b; line-height: 1.5; font-size: 0.9rem;">
+                <div style="text-align: left; font-family: 'Inter', sans-serif; color: #1e293b; line-height: 1.6;">
                     
-                    <div style="margin-bottom: 15px;">
-                        <h4 style="color: #2563eb; margin-bottom: 5px; border-bottom: 1px solid #e2e8f0;">1. Información Personal</h4>
-                        <p style="margin: 0;">Ingresa tu <b>Grado Académico</b>, nombre y cargo. Asegúrate de usar tu <b>Correo Institucional</b> para recibir la respuesta oficial.</p>
+                    <div style="margin-bottom: 20px; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden;">
+                        <div style="background: #2563eb; color: white; padding: 10px 15px; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+                            👤 Panel del Solicitante
+                        </div>
+                        <div style="padding: 15px; font-size: 0.9rem; background: #f8fafc;">
+                            Ingresa tu <b>Grado Académico</b>, nombre y cargo. El correo institucional es obligatorio para recibir la respuesta oficial de tu solicitud.
+                        </div>
                     </div>
 
-                    <div style="margin-bottom: 15px;">
-                        <h4 style="color: #2563eb; margin-bottom: 5px; border-bottom: 1px solid #e2e8f0;">2. Detalles de la Actividad</h4>
-                        <p style="margin: 0;">Define el <b>Tipo de Evento</b> y añade una descripción clara. Esta información ayuda al gestor a priorizar las aprobaciones.</p>
+                    <div style="margin-bottom: 20px; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden;">
+                        <div style="background: #10b981; color: white; padding: 10px 15px; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+                            📂 Detalles de la Actividad
+                        </div>
+                        <div style="padding: 15px; font-size: 0.9rem; background: #f8fafc;">
+                            Define el <b>Tipo de Actividad</b> y describe el evento de forma clara. Esta información ayuda al gestor a validar y priorizar las solicitudes.
+                        </div>
                     </div>
 
-                    <div style="margin-bottom: 15px;">
-                        <h4 style="color: #2563eb; margin-bottom: 5px; border-bottom: 1px solid #e2e8f0;">3. Logística y Disponibilidad</h4>
-                        <p style="margin: 0 0 8px 0;">Selecciona el <b>Lugar</b> primero. El calendario mostrará colores según la ocupación:</p>
-                        <div style="padding-left: 10px;">
-                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
-                                <span style="width: 12px; height: 12px; background: #22c55e; border-radius: 50%;"></span> <b>Verde:</b> Libre.
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
-                                <span style="width: 12px; height: 12px; background: #eab308; border-radius: 50%;"></span> <b>Amarillo:</b> Medio.
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 8px;">
-                                <span style="width: 12px; height: 12px; background: #ef4444; border-radius: 50%;"></span> <b>Rojo:</b> Alto.
+                    <div style="margin-bottom: 20px; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden;">
+                        <div style="background: #f59e0b; color: white; padding: 10px 15px; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+                            📍 Logística y Calendario
+                        </div>
+                        <div style="padding: 15px; font-size: 0.9rem; background: #f8fafc;">
+                            <p style="margin-bottom: 10px;"><b>Selecciona primero el Lugar</b>. El calendario se iluminará con colores según la ocupación actual:</p>
+                            <div style="display: flex; gap: 15px; font-weight: 600;">
+                                <span style="color: #22c55e;">● Verde: Libre</span>
+                                <span style="color: #eab308;">● Amarillo: Medio</span>
+                                <span style="color: #ef4444;">● Rojo: Saturado</span>
                             </div>
                         </div>
                     </div>
 
-                    <div style="background: #f8fafc; padding: 12px; border-radius: 10px; border-left: 4px solid #2563eb;">
-                        <h4 style="color: #2563eb; margin: 0 0 5px 0;">Reglas de Tiempo</h4>
-                        <ul style="margin: 0; padding-left: 18px;">
-                            <li>Duración mínima obligatoria: <b>1 hora</b>.</li>
-                            <li>Margen de limpieza entre eventos: <b>30 minutos</b>.</li>
-                            <li>Horarios permitidos: <b>08:00 AM - 08:00 PM</b>.</li>
+                    <div style="background: #f1f5f9; padding: 15px; border-radius: 12px; font-size: 0.85rem; color: #475569;">
+                        <strong>Reglas de Reservación:</strong>
+                        <ul style="margin-top: 5px; padding-left: 18px;">
+                            <li>Duración mínima del evento: 1 hora.</li>
+                            <li>Horarios permitidos: 08:00 AM a 08:00 PM.</li>
+                            <li>Días de atención: Lunes a Viernes.</li>
                         </ul>
                     </div>
                 </div>
-            `,
-            confirmButtonText: 'Entendido',
-            confirmButtonColor: '#2563eb',
-            width: '550px'
+            `
         });
     });
 }

@@ -109,6 +109,12 @@ document.addEventListener("click", async (e) => {
 
         if (!confirm.isConfirmed) return;
 
+        Swal.fire({
+            title: 'Procesando...',
+            allowOutsideClick: false,
+            didOpen: () => { Swal.showLoading(); }
+        });
+
         try {
             const requestRef = doc(db, "solicitudes", id);
             const requestSnap = await getDoc(requestRef);
@@ -123,7 +129,7 @@ document.addEventListener("click", async (e) => {
             }
 
             const data = requestSnap.data();
-            await emailjs.send("service_jhvkojp", "template_xja6qwb", {
+            await emailjs.send("service_r39dndx", "template_xja6qwb", {
                 title: data.title,
                 name: data.name,
                 state: newState,
