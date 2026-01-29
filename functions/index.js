@@ -2,19 +2,16 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const { onSchedule } = require('firebase-functions/v2/scheduler');
 const { getFirestore } = require('firebase-admin/firestore');
-const sgMail = require('@sendgrid/mail'); // Importar SendGrid
+const nodemailer = require('nodemailer'); // Importar Nodemailer
 
 admin.initializeApp();
 
-
-const DB_ID_TARGET = 'unieventbd';
-const db = getFirestore(admin.app(), DB_ID_TARGET);
+const db = getFirestore(admin.app(), 'unieventbd');
 const ADMIN_CONFIG_ID = 'adminSettings';
 
 function calculateTimeDifference(timeStr) {
     const unit = timeStr.slice(-1);
     const value = parseInt(timeStr.slice(0, -1));
-
     switch (unit) {
         case 'm': return value * 60 * 1000;
         case 'h': return value * 60 * 60 * 1000;
@@ -23,42 +20,32 @@ function calculateTimeDifference(timeStr) {
     }
 }
 
-
-
 exports.sendEventReminders = onSchedule({
     schedule: 'every 1 minutes',
     timeoutSeconds: 300,
     memory: '256MiB',
     timeZone: 'America/Mexico_City'
-}, async (context) => {
+}, async (event) => {
+    
+    // Configuración del transporte de Nodemailer con Gmail
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'soporteunievent@gmail.com', // Tu correo personal
+            pass: process.env.GMAIL_PASSWORD
+        }
+    });
 
-
-    const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
-    if (!SENDGRID_API_KEY) {
-        console.error("Error fatal: La clave API de SendGrid (SENDGRID_API_KEY) no está configurada en Google Cloud Run.");
-        return null;
-    }
-    sgMail.setApiKey(SENDGRID_API_KEY);
-
-
-    console.log("Iniciando chequeo de recordatorios programado (usando SendGrid)...");
-
+    console.log("Iniciando chequeo de recordatorios (Nodemailer)...");
 
     const configSnap = await db.collection('config').doc(ADMIN_CONFIG_ID).get();
-    if (!configSnap.exists) {
-        console.log("Configuración no encontrada. Finalizando.");
-        return null;
-    }
+    if (!configSnap.exists) return null;
 
     const { ADMIN_EMAIL, REMINDER_TIME } = configSnap.data();
-    if (REMINDER_TIME === 'none' || !ADMIN_EMAIL) {
-        console.log("Recordatorios deshabilitados.");
-        return null;
-    }
+    if (REMINDER_TIME === 'none' || !ADMIN_EMAIL) return null;
 
     const reminderTimeMs = calculateTimeDifference(REMINDER_TIME);
     const now = new Date().getTime();
-
 
     const snapshot = await db.collection('solicitudes')
         .where("state", "==", "Aceptada")
@@ -68,62 +55,49 @@ exports.sendEventReminders = onSchedule({
     const updatePromises = [];
 
     for (const docSnap of snapshot.docs) {
-        const event = docSnap.data();
-        const eventId = docSnap.id;
+        const eventData = docSnap.data();
+        
+        // Lógica de tiempo original
+        const [year, month, day] = eventData.date.split('-').map(Number);
+        const [hour, minute] = eventData.startTime.split(':').map(Number);
+        const eventStartTime = Date.UTC(year, month - 1, day, hour + 6, minute);
 
-
-        const dateStr = event.date;
-        const timeStr = event.startTime;
-        const [year, month, day] = dateStr.split('-').map(Number);
-        const [hour, minute] = timeStr.split(':').map(Number);
-        const TIMEZONE_OFFSET_HOURS = 6;
-        const eventStartTime = Date.UTC(year, month - 1, day, hour + TIMEZONE_OFFSET_HOURS, minute);
-        const WINDOW_TOLERANCE_MS = 60000;
-        const WINDOW_END_MS = 5000;
-        const windowStart = now - WINDOW_TOLERANCE_MS;
-        const windowEnd = now + reminderTimeMs + WINDOW_END_MS;
-        const isDue = (eventStartTime > windowStart) && (eventStartTime <= windowEnd);
+        const isDue = (eventStartTime > (now - 60000)) && (eventStartTime <= (now + reminderTimeMs + 5000));
 
         if (isDue) {
-            const msg = {
-                to: ADMIN_EMAIL,
-                from: 'kroblero@uv.mx',
-                subject: `🚨 RECORDATORIO: El evento "${event.activityName}" inicia pronto`,
-                html: `
-                    <p>Estimada Lic. Karla D. Roblero,</p>
-                    <p>Este es un recordatorio automático de UniEvent. Tienes un evento aprobado que comenzará pronto.</p>
-                    <p><b>Actividad:</b> ${event.activityName}</p>
-                    <p><b>Lugar:</b> ${event.place}</p>
-                    <p><b>Fecha:</b> ${event.date}</p>
-                    <p><b>Hora:</b> ${event.startTime} - ${event.endTime}</p>
-                    <p><i>(Recordatorio configurado para ${REMINDER_TIME} antes)</i></p>
-                `
-            };
-
             try {
-
-                await sgMail.send(msg);
-
-                console.log(`Éxito: Recordatorio enviado para ${event.activityName}`);
-
-                const updatePromise = db.collection('solicitudes').doc(eventId).update({
-                    reminderSent: true,
-                    reminderSentAt: admin.firestore.Timestamp.now()
+                // Envío de correo con Nodemailer
+                await transporter.sendMail({
+                    from: '"UniEvent Notificaciones" <TU_CORREO_GMAIL@gmail.com>',
+                    to: eventData.email, // Correo institucional del solicitante (@uv.mx)
+                    subject: `🚨 RECORDATORIO: "${eventData.activityName}" inicia pronto`,
+                    html: `
+                        <div style="font-family: sans-serif; border: 1px solid #e2e8f0; padding: 20px; border-radius: 10px;">
+                            <h2 style="color: #2563eb;">Recordatorio de Evento</h2>
+                            <p>Hola <b>${eventData.name}</b>,</p>
+                            <p>Este es un aviso automático: tu evento en el <b>${eventData.place}</b> comenzará pronto.</p>
+                            <p><b>Actividad:</b> ${eventData.activityName}</p>
+                            <p><b>Horario:</b> ${eventData.startTime} - ${eventData.endTime}</p>
+                            <br>
+                            <p style="font-size: 0.8rem; color: #64748b;">Aviso enviado ${REMINDER_TIME} antes del inicio.</p>
+                        </div>
+                    `
                 });
-                updatePromises.push(updatePromise);
 
+                console.log(`Correo enviado exitosamente a: ${eventData.email}`);
+
+                updatePromises.push(
+                    db.collection('solicitudes').doc(docSnap.id).update({
+                        reminderSent: true,
+                        reminderSentAt: admin.firestore.Timestamp.now()
+                    })
+                );
             } catch (error) {
-
-                if (error.response) {
-                    console.error('Error de SendGrid:', error.response.body);
-                } else {
-                    console.error('Error al enviar con SendGrid:', error);
-                }
+                console.error('Error al enviar con Nodemailer:', error);
             }
         }
     }
 
     await Promise.all(updatePromises);
-    console.log(`Chequeo finalizado. ${updatePromises.length} recordatorios procesados.`);
     return null;
 });
