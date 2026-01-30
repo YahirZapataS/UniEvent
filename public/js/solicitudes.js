@@ -194,7 +194,8 @@ form.addEventListener("submit", async (e) => {
         email: document.getElementById("email").value,
         comments: document.getElementById("comments").value || "",
         state: "Pendiente",
-        registerDate: new Date()
+        registerDate: new Date(),
+        reminderSent: false
     };
 
     try {
