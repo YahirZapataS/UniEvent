@@ -1,4 +1,4 @@
-import { auth } from '../firebaseConfig.js';
+import { auth } from '../services/firebaseConfig.js';
 import { signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 class MainSidebar extends HTMLElement {
@@ -37,7 +37,7 @@ class MainSidebar extends HTMLElement {
 
             if (result.isConfirmed) {
                 await signOut(auth);
-                window.location.href = window.location.origin + './index.html';
+                window.location.href = window.location.origin + '/index.html';
             }
         });
     }

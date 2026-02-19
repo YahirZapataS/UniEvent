@@ -1,4 +1,4 @@
-import { db, auth } from './firebaseConfig.js';
+import { db, auth } from './services/firebaseConfig.js';
 import { collection, getDocs, getDoc, updateDoc, doc, query, where, orderBy, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { protectRoute } from './modules/authGuard.js';

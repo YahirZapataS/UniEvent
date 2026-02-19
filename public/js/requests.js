@@ -1,4 +1,4 @@
-import { db } from "./firebaseConfig.js";
+import { db } from './services/firebaseConfig.js';
 import { collection, addDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { toMinutes, minutesToTimeStr } from './modules/utils.js';
 

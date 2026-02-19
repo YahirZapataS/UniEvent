@@ -1,4 +1,4 @@
-import { db } from './firebaseConfig.js';
+import { db } from './services/firebaseConfig.js';
 import { collection, query, where, getDocs, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { protectRoute } from './modules/authGuard.js';
 import { formatDateSpanish } from './modules/utils.js';
