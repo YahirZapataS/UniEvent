@@ -1,28 +1,11 @@
 import { db, auth } from "./firebaseConfig.js";
 import { collection, getDocs, query, where, orderBy, doc, getDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { formatDateSpanish, toMinutes, minutesToTimeStr } from './modules/utils.js';
 
 const table = document.querySelector('#applicationsTable tbody');
 const availabilityCache = new Map();
 let currentEditingId = null;
-
-const toMinutes = (timeStr) => {
-    const [hour, minute] = timeStr.split(":").map(Number);
-    return hour * 60 + minute;
-};
-
-const minutesToTimeStr = (totalMinutes) => {
-    const hours = Math.floor(totalMinutes / 60);
-    const minutes = totalMinutes % 60;
-    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
-};
-
-const formatDateSpanish = (dateStr) => {
-    if (!dateStr) return "Sin fecha";
-    const [year, month, day] = dateStr.split("-");
-    const date = new Date(year, month - 1, day);
-    return date.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
-};
 
 const loadRequestsByStatus = async (status) => {
     const requestsRef = collection(db, 'solicitudes');
@@ -30,6 +13,11 @@ const loadRequestsByStatus = async (status) => {
     const snapshot = await getDocs(q);
 
     table.innerHTML = "";
+
+    if (snapshot.empty) {
+        table.innerHTML = `<tr><td colspan="9" class="empty-row">No hay solicitudes para mostrar</td></tr>`;
+        return;
+    }
 
     snapshot.forEach((docSnap) => {
         const data = docSnap.data();

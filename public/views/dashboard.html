@@ -8,36 +8,20 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.8/dist/sweetalert2.all.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.8/dist/sweetalert2.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="./css/dashboardStyle.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="module">
         (function () {
             emailjs.init("IyDvp3Qr5cKPcCyWS");
         })();
     </script>
-    <script type="module" src="./js/dashboard.js"></script>
+    <script type="module" src="../js/dashboard.js"></script>
+    <script type="module" src="../js/components/MainSidebar.js"></script>
 </head>
 
 <body>
     <div class="dashboard-container">
-        <aside class="sidebar">
-            <div class="brand">Uni<span>Event</span></div>
-            <nav>
-                <ul>
-                    <li class="active"><a href="dashboard.html">Solicitudes</a></li>
-                    <li><a href="dashboard-calendar.html">Calendario</a></li>
-                    <li><a href="dashboard-approved.html">Aprobadas</a></li>
-                    <li><a href="dashboard-declined.html">Rechazadas</a></li>
-                    <li><a href="dashboard-finished.html">Concluidas</a></li>
-                    <li class="separator"></li>
-                    <li><a href="dashboard-reports.html">Reportes</a></li>
-                    <li><a href="dashboard-configuration.html">Configuración</a></li>
-                </ul>
-            </nav>
-            <div class="sidebar-end">
-                <a href="index.html" id="cerrarSesion" class="btn-logout">Cerrar sesión</a>
-            </div>
-        </aside>
+        <main-sidebar active="solicitudes"></main-sidebar>
 
         <main class="main-content">
             <header class="page-header">
@@ -48,8 +32,10 @@
             </header>
 
             <section class="card-table">
-                <div class="table-header">
-                    <h2>Solicitudes Pendientes</h2>
+                <div class="table-header"
+                    style="padding: 1.5rem; border-bottom: 1px solid var(--border); background-color: #fcfcfd;">
+                    <h2 style="font-size: 1.1rem; font-weight: 700; color: var(--text-main);">Solicitudes Pendientes
+                    </h2>
                 </div>
                 <table id="applicationsTable">
                     <thead>
@@ -66,7 +52,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        </tbody>
+                    </tbody>
                 </table>
             </section>
         </main>
@@ -74,4 +60,5 @@
         <button id="fabAdd" class="fab" title="Nueva Solicitud">+</button>
     </div>
 </body>
+
 </html>

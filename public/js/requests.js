@@ -1,7 +1,7 @@
 import { db } from "./firebaseConfig.js";
 import { collection, addDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { toMinutes, minutesToTimeStr } from './modules/utils.js';
 
-const ADMIN_EMAIL = "kroblero@uv.mx";
 const EMAILJS_SERVICE_ID_NEW = "service_r39dndx";
 const EMAILJS_TEMPLATE_ID_NEW = "template_547yaif";
 
@@ -14,19 +14,15 @@ const btnHelp = document.getElementById('btnHelp');
 
 const availabilityCache = new Map();
 
-// --- HELPERS DE TIEMPO ---
-const toMinutes = (timeStr) => {
-    const [hour, minute] = timeStr.split(":").map(Number);
-    return hour * 60 + minute;
-};
+async function getAdminConfig() {
+    const docRef = doc(db, 'config', 'adminSettings');
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+        return docSnap.data();
+    }
+    return { ADMIN_EMAIL: "admin_default@uv.mx" };
+}
 
-const minutesToTimeStr = (totalMinutes) => {
-    const hours = Math.floor(totalMinutes / 60);
-    const minutes = totalMinutes % 60;
-    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
-};
-
-// --- LÓGICA DE DISPONIBILIDAD VISUAL (COLORES) ---
 async function preloadMonthAvailability(dateObj, place) {
     if (!place) {
         availabilityCache.clear();
@@ -77,7 +73,6 @@ async function preloadMonthAvailability(dateObj, place) {
     }
 }
 
-// --- LÓGICA DE HORARIOS DINÁMICOS (SIN BUFFER) ---
 async function updateAvailableStartTimes() {
     const date = dateInput.value;
     const place = placeInput.value;
@@ -91,21 +86,20 @@ async function updateAvailableStartTimes() {
         const snapshot = await getDocs(q);
         let occupied = snapshot.docs.map(doc => ({ start: toMinutes(doc.data().startTime), end: toMinutes(doc.data().endTime) }));
 
-        const START_LIMIT = 480; // 08:00 AM
-        const END_LIMIT = 1200;  // 08:00 PM
+        const START_LIMIT = 480;
+        const END_LIMIT = 1200;
         const STEP = 30;
         const MIN_DURATION = 60;
 
         let optionsHtml = '<option value="">Hora Inicio</option>';
         for (let time = START_LIMIT; time < END_LIMIT; time += STEP) {
-            // Se eliminó el BUFFER de la validación de ocupación
             const isOccupied = occupied.some(slot => time >= slot.start && time < slot.end);
             
             if (!isOccupied) {
                 let limitForThisSlot = END_LIMIT;
                 occupied.forEach(slot => {
                     if (slot.start > time && slot.start < limitForThisSlot) {
-                        limitForThisSlot = slot.start; // El límite es exactamente el inicio del siguiente evento
+                        limitForThisSlot = slot.start;
                     }
                 });
                 if ((limitForThisSlot - time) >= MIN_DURATION) {
@@ -137,7 +131,6 @@ async function updateAvailableEndTimes() {
 
     let limitForEnd = END_LIMIT;
     occupied.forEach(slot => {
-        // Se eliminó el BUFFER para permitir que el fin coincida con el inicio del siguiente
         if (slot.start > startMinutes && slot.start < limitForEnd) {
             limitForEnd = slot.start;
         }
@@ -151,7 +144,6 @@ async function updateAvailableEndTimes() {
     endTimeInput.innerHTML = optionsHtml;
 }
 
-// --- INICIALIZACIÓN ---
 document.addEventListener('DOMContentLoaded', () => {
     flatpickr(dateInput, {
         dateFormat: "Y-m-d",
@@ -177,7 +169,6 @@ placeInput.addEventListener('change', async () => {
 
 startTimeInput.addEventListener('change', updateAvailableEndTimes);
 
-// --- ENVÍO ---
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
     Swal.fire({ title: 'Enviando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
@@ -199,9 +190,10 @@ form.addEventListener("submit", async (e) => {
     };
 
     try {
+        const adminConfig = await getAdminConfig();
         await addDoc(collection(db, "solicitudes"), formData);
         await emailjs.send(EMAILJS_SERVICE_ID_NEW, EMAILJS_TEMPLATE_ID_NEW, {
-            to_email: ADMIN_EMAIL,
+            to_email: adminConfig.ADMIN_EMAIL,
             responsible_name: `${formData.name}`,
             activity_title: formData.activityName,
             request_date: formData.date,
@@ -215,7 +207,6 @@ form.addEventListener("submit", async (e) => {
     }
 });
 
-// --- GUÍA DE RESERVACIÓN ---
 if (btnHelp) {
     btnHelp.addEventListener('click', () => {
         Swal.fire({
@@ -230,7 +221,7 @@ if (btnHelp) {
                     
                     <div style="margin-bottom: 20px; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden;">
                         <div style="background: #2563eb; color: white; padding: 10px 15px; font-weight: 700; display: flex; align-items: center; gap: 8px;">
-                            👤 Panel del Solicitante
+                            Panel del Solicitante
                         </div>
                         <div style="padding: 15px; font-size: 0.9rem; background: #f8fafc;">
                             Ingresa tu <b>Grado Académico</b>, nombre y cargo. El correo institucional es obligatorio para recibir la respuesta oficial de tu solicitud.
@@ -239,7 +230,7 @@ if (btnHelp) {
 
                     <div style="margin-bottom: 20px; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden;">
                         <div style="background: #10b981; color: white; padding: 10px 15px; font-weight: 700; display: flex; align-items: center; gap: 8px;">
-                            📂 Detalles de la Actividad
+                            Detalles de la Actividad
                         </div>
                         <div style="padding: 15px; font-size: 0.9rem; background: #f8fafc;">
                             Define el <b>Tipo de Actividad</b> y describe el evento de forma clara. Esta información ayuda al gestor a validar y priorizar las solicitudes.
@@ -248,7 +239,7 @@ if (btnHelp) {
 
                     <div style="margin-bottom: 20px; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden;">
                         <div style="background: #f59e0b; color: white; padding: 10px 15px; font-weight: 700; display: flex; align-items: center; gap: 8px;">
-                            📍 Logística y Calendario
+                            Logística y Calendario
                         </div>
                         <div style="padding: 15px; font-size: 0.9rem; background: #f8fafc;">
                             <p style="margin-bottom: 10px;"><b>Selecciona primero el Lugar</b>. El calendario se iluminará con colores según la ocupación actual:</p>
