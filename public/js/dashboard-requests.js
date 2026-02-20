@@ -69,7 +69,6 @@ window.deleteEvent = async (id) => {
     });
 
     if (result.isConfirmed) {
-        // Mostrar Loading
         Swal.fire({
             title: 'Cancelando...',
             allowOutsideClick: false,
@@ -97,8 +96,6 @@ window.editEvent = async (id) => {
     const docRef = doc(db, "solicitudes", id);
     const snap = await getDoc(docRef);
     const data = snap.data();
-
-    // Precargar disponibilidad antes de abrir el modal
     await preloadMonthAvailability(new Date(), data.place);
 
     const { value: formValues } = await Swal.fire({
@@ -135,7 +132,6 @@ window.editEvent = async (id) => {
             const startSelect = document.getElementById('sw-start');
             const endSelect = document.getElementById('sw-end');
 
-            // Inicializar Flatpickr con la lógica de colores de la solicitud
             flatpickr(dateInput, {
                 defaultDate: data.date,
                 dateFormat: "Y-m-d",
@@ -148,12 +144,10 @@ window.editEvent = async (id) => {
                     if (color) dayElem.classList.add(`availability-${color}`);
                 },
                 onChange: () => {
-                    // Reutilizar la lógica de carga de horas dinámicas
                     updateAvailableStartTimes_Edit(dateInput.value, data.place, startSelect, endSelect);
                 }
             });
 
-            // Al cargar el modal, llenar horarios disponibles iniciales
             updateAvailableStartTimes_Edit(data.date, data.place, startSelect, endSelect, data.startTime);
 
             startSelect.addEventListener('change', () => {
@@ -200,14 +194,11 @@ onAuthStateChanged(auth, async (user) => {
 
 });
 
-// Funciones adaptadas para la lógica de edición en Dashboard
 async function updateAvailableStartTimes_Edit(date, place, startSelect, endSelect, currentStart = "") {
     if (!date || !place) return;
     try {
         const q = query(collection(db, "solicitudes"), where("date", "==", date), where("place", "==", place), where("state", "in", ["Pendiente", "Aceptada"]));
         const snapshot = await getDocs(q);
-
-        // Excluir el documento actual de la ocupación para que no se bloquee a sí mismo
         let occupied = snapshot.docs
             .filter(doc => doc.id !== currentEditingId)
             .map(doc => ({ start: toMinutes(doc.data().startTime), end: toMinutes(doc.data().endTime) }));

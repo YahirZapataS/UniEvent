@@ -3,76 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UniEvent - Gestión de Espacios Académicos</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>UniEvent - Portal de Reservaciones</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="./css/landingStyle.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.8/dist/sweetalert2.all.min.js"></script>
 </head>
 <body>
+    
     <header class="header">
         <div class="logo">Uni<span>Event</span></div>
-        <nav>
-            <ul class="nav-links">
-                <li><a href="#inicio">Inicio</a></li>
-                <li><a href="#caracteristicas">Características</a></li>
-                <li><a href="#contacto">Contacto</a></li>
-            </ul>
-        </nav>
-        <div class="cta-buttons">
-            <a href="./views/login.html" class="link-login">Iniciar Sesión</a>
-            <a href="./views/requests.html" class="button primary">Solicitar Espacio</a>
+        <div class="header-actions">
+            <a href="./views/login.html" class="btn-ghost">Acceso Gestor</a>
         </div>
     </header>
 
-    <main>
-        <section id="inicio" class="hero">
-            <div class="hero-content">
-                <h1>Optimiza la Gestión de tus <span>Espacios Académicos</span></h1>
-                <p>UniEvent centraliza solicitudes, aprobaciones y calendarios en una sola plataforma intuitiva y rápida.</p>
-                <div class="hero-actions">
-                    <a href="./views/requests.html" class="button primary large">¡Solicita un espacio ahora!</a>
-                    <a href="#caracteristicas" class="button outline">Saber más</a>
-                </div>
+    <main class="hero-fullscreen">
+        <div class="hero-content">
+            <span class="badge">Plataforma Institucional</span>
+            <h1>Gestión Inteligente de <br><span>Espacios Académicos</span></h1>
+            <p>Consulta disponibilidad y agenda auditorios o aulas en tiempo real. Un proceso rápido, digital y sin complicaciones.</p>
+            
+            <div class="hero-actions">
+                <a href="./views/requests.html" class="btn-primary-large">
+                    Solicitar un espacio
+                    <span class="arrow">→</span>
+                </a>
             </div>
-        </section>
-
-        <section id="caracteristicas" class="features">
-            <div class="section-header">
-                <h2>Funcionalidades Clave</h2>
-                <p>Todo lo que necesitas para una administración impecable</p>
-            </div>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <h3>Solicitudes Sencillas</h3>
-                    <p>Formularios optimizados para reducir errores y tiempos de espera.</p>
-                </div>
-                <div class="feature-card">
-                    <h3>Calendario Integrado</h3>
-                    <p>Sincronización en tiempo real para evitar cruces de horarios.</p>
-                </div>
-                <div class="feature-card">
-                    <h3>Panel de Control</h3>
-                    <p>Métricas y estados claros para una toma de decisiones rápida.</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="contacto" class="cta-section">
-            <div class="cta-box">
-                <h2>¿Listo para digitalizar tu gestión?</h2>
-                <p>Únete a las facultades que ya están ahorrando tiempo hoy mismo.</p>
-                <div class="action-buttons">
-                    <a href="./views/requests.html" class="button white">Solicitar Espacio</a>
-                    <a href="./views/login.html" class="button ghost">Acceso Gestor</a>
-                </div>
-            </div>
-        </section>
+        </div>
     </main>
 
     <footer class="footer">
         <p>&copy; 2026 UniEvent. Todos los derechos reservados.</p>
+        <div style="margin-top: 0.5rem; display: flex; justify-content: center; gap: 1.5rem;">
+            <a href="mailto:soporteunievent@gmail.com" style="color: #94a3b8; text-decoration: none; transition: color 0.2s;">Soporte Técnico</a>
+            <a href="#" id="btnPrivacy" style="color: #94a3b8; text-decoration: none; transition: color 0.2s;">Aviso de Privacidad</a>
+        </div>
     </footer>
 
-    <script type="module" src="./js/landing.js"></script>
+    <script>
+        document.getElementById('btnPrivacy').addEventListener('click', (e) => {
+            e.preventDefault();
+            Swal.fire({
+                title: '<span style="color: #1e293b; font-weight: 800; font-size: 1.5rem;">Aviso de Privacidad</span>',
+                width: '700px',
+                padding: '2rem',
+                confirmButtonText: 'Entendido',
+                confirmButtonColor: '#2563eb',
+                html: `
+                    <div style="text-align: left; font-size: 0.9rem; color: #475569; line-height: 1.6; max-height: 400px; overflow-y: auto; padding-right: 10px;">
+                        
+                        <p style="margin-bottom: 15px;">
+                            La <strong>Facultad de Contaduría y Administración</strong>, a través del sistema <strong>UniEvent</strong>, es la responsable del tratamiento de los datos personales que nos proporcione.
+                        </p>
+
+                        <h4 style="color: #0f172a; margin-top: 20px; margin-bottom: 5px;">1. Datos Personales Recabados</h4>
+                        <p style="margin-bottom: 15px;">Para llevar a cabo las finalidades descritas en el presente aviso, recabaremos los siguientes datos: Nombre completo del responsable, cargo o grado académico y correo electrónico institucional.</p>
+
+                        <h4 style="color: #0f172a; margin-top: 20px; margin-bottom: 5px;">2. Finalidad del Tratamiento</h4>
+                        <p style="margin-bottom: 15px;">Sus datos personales serán utilizados exclusivamente para las siguientes finalidades:
+                            <ul style="margin-top: 5px; padding-left: 20px;">
+                                <li>Gestionar, validar y aprobar las reservaciones de espacios académicos.</li>
+                                <li>Enviar notificaciones y recordatorios automatizados sobre el estado de su solicitud.</li>
+                                <li>Generar reportes estadísticos internos sobre el uso de las instalaciones.</li>
+                            </ul>
+                        </p>
+
+                        <h4 style="color: #0f172a; margin-top: 20px; margin-bottom: 5px;">3. Transferencia de Datos</h4>
+                        <p style="margin-bottom: 15px;">Se le informa que sus datos personales <strong>no serán compartidos</strong> con ninguna autoridad, empresa, organización o persona ajena a esta institución académica, y serán resguardados en bases de datos seguras.</p>
+
+                        <h4 style="color: #0f172a; margin-top: 20px; margin-bottom: 5px;">4. Derechos ARCO</h4>
+                        <p style="margin-bottom: 15px;">Usted tiene derecho a conocer qué datos personales tenemos de usted, para qué los utilizamos y las condiciones del uso que les damos (Acceso). Asimismo, es su derecho solicitar la corrección de su información personal (Rectificación); que la eliminemos de nuestros registros (Cancelación); así como oponerse al uso de sus datos personales para fines específicos (Oposición). Para el ejercicio de cualquiera de estos derechos, puede comunicarse a <strong>kroblero@uv.mx</strong>.</p>
+                        
+                        <p style="font-size: 0.8rem; text-align: center; margin-top: 25px; color: #94a3b8;">
+                            Última actualización: Febrero 2026
+                        </p>
+                    </div>
+                `
+            });
+        });
+    </script>
 </body>
 </html>

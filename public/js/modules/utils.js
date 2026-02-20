@@ -1,7 +1,6 @@
 import { db } from '../services/firebaseConfig.js';
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// Formateo de fecha institucional
 export const formatDateSpanish = (dateStr) => {
     if (!dateStr) return "Sin fecha";
     const [year, month, day] = dateStr.split("-");
@@ -9,27 +8,21 @@ export const formatDateSpanish = (dateStr) => {
     return date.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
 };
 
-// Conversión de HH:MM a minutos totales
 export const toMinutes = (timeStr) => {
     const [hour, minute] = timeStr.split(":").map(Number);
     return hour * 60 + minute;
 };
 
-// Conversión de minutos totales a formato HH:MM
 export const minutesToTimeStr = (totalMinutes) => {
     const hours = Math.floor(totalMinutes / 60);
     const minutes = totalMinutes % 60;
     return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
 };
 
-// Mostrar error estándar con Swal
 export const showError = (message) => {
     Swal.fire('Error', message, 'error');
 };
 
-/**
- * Obtiene la lista de lugares activos desde Firestore
- */
 export const getActivePlaces = async () => {
     try {
         const docRef = doc(db, 'config', 'places');
@@ -49,13 +42,8 @@ export const getActivePlaces = async () => {
     }
 };
 
-/**
- * Llena un select dinámicamente con los lugares de Firebase
- */
 export const populatePlacesSelect = async (selectElement, defaultText = "Seleccione una opción") => {
     if (!selectElement) return;
-    
-    // Mostramos estado de carga temporal
     selectElement.innerHTML = `<option value="">Cargando espacios...</option>`;
     
     const places = await getActivePlaces();

@@ -37,7 +37,7 @@ class MainSidebar extends HTMLElement {
 
             if (result.isConfirmed) {
                 await signOut(auth);
-                window.location.href = window.location.origin + '/index.html';
+                window.location.href = window.location.origin + './index.html';
             }
         });
     }

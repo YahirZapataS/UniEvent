@@ -165,13 +165,16 @@ main-sidebar {
     background: var(--white);
     border-radius: 1rem;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-    overflow: hidden;
     border: 1px solid var(--border);
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
+    min-width: 800px; 
 }
 
 th {
@@ -567,19 +570,133 @@ td {
 .text-right { text-align: right; }
 .flex-end-gap { display: flex; justify-content: flex-end; gap: 0.5rem; }
 
-/* Responsive */
-@media (max-width: 1024px) {
-    .sidebar {
-        width: 220px;
-    }
-}
-
+/* --- Responsividad Móvil y App Navigation --- */
 @media (max-width: 900px) {
-    .sidebar {
-        display: none;
+    .dashboard-container {
+        display: block; /* Quitamos flexbox para que el contenido suba a su lugar */
+    }
+
+    main-sidebar {
+        height: 0;
+        width: 0;
+        display: block;
     }
 
     .main-content {
-        padding: 1.5rem;
+        padding: 1.2rem;
+        padding-bottom: 90px; /* Vital para que el menú inferior no tape los datos */
+        height: 100vh;
+        overflow-y: auto; /* Mantiene el scroll interno */
     }
+
+    /* 1. Transformamos el Sidebar en un Bottom Nav fijo */
+    .sidebar {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 70px;
+        background-color: var(--white);
+        border-top: 1px solid var(--border);
+        box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.05);
+        flex-direction: row;
+        padding: 0;
+        z-index: 1000;
+    }
+
+    /* Ocultamos el logo y la línea separadora */
+    .brand, .separator {
+        display: none;
+    }
+
+    .sidebar nav {
+        flex-grow: 1;
+        width: 100%;
+        height: 100%;
+    }
+
+    /* 2. Lista deslizable horizontalmente (Swipe) */
+    .sidebar ul {
+        display: flex;
+        flex-direction: row;
+        height: 100%;
+        overflow-x: auto; /* Habilita el deslizamiento táctil */
+        -webkit-overflow-scrolling: touch;
+        align-items: center;
+        padding: 0 1rem;
+        gap: 0.5rem;
+        scrollbar-width: none; /* Oculta barra en Firefox */
+    }
+    
+    .sidebar ul::-webkit-scrollbar {
+        display: none; /* Oculta barra en Chrome/Safari */
+    }
+
+    .sidebar li {
+        margin: 0;
+        white-space: nowrap;
+    }
+
+    /* 3. Diseño de Píldoras (Pills) para los botones táctiles */
+    .sidebar a {
+        padding: 0.6rem 1rem;
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        font-weight: 600;
+        border-radius: 2rem;
+        background: transparent;
+        transition: all 0.2s;
+    }
+
+    .sidebar li.active a,
+    .sidebar a:hover {
+        background-color: var(--primary);
+        color: var(--white);
+    }
+
+    /* 4. Botón Cerrar Sesión adaptado al flujo */
+    .sidebar-end {
+        display: flex;
+        align-items: center;
+        padding-right: 1rem;
+        background: linear-gradient(90deg, transparent, var(--white) 15%);
+    }
+
+    .btn-logout {
+        margin: 0;
+        padding: 0.6rem 1rem;
+        border-radius: 2rem;
+        font-weight: 600;
+        white-space: nowrap;
+        background-color: #fef2f2;
+        border: none;
+    }
+
+    /* --- Ajustes del Header y FAB --- */
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .title-area h1 { font-size: 1.4rem; }
+
+    .actions-area, .btn-print {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* Subimos el botón flotante (+) para que no choque con el menú inferior */
+    .fab {
+        bottom: 85px; 
+        right: 1.2rem;
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+    }
+
+    /* Unificamos columnas del modal de Firebase */
+    .swal-form-grid { grid-template-columns: 1fr; }
 }

@@ -4,18 +4,13 @@ import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/f
 import { protectRoute } from './modules/authGuard.js';
 import { formatDateSpanish } from './modules/utils.js';
 
-// 1. Protección de ruta inmediata (reemplaza el bloque manual de auth)
 protectRoute();
 
-// Inicialización de EmailJS
 emailjs.init("IyDvp3Qr5cKPcCyWS");
 
 const table = document.querySelector('#applicationsTable tbody');
 const btnAdd = document.getElementById('fabAdd');
 
-/**
- * Limpieza automática de eventos pasados: Cambia estado a "Concluida"
- */
 async function updateFinishedRequests() {
     const requestsRef = collection(db, 'solicitudes');
     const q = query(requestsRef, where("state", "==", "Aceptada"));
@@ -43,9 +38,6 @@ async function updateFinishedRequests() {
     }
 }
 
-/**
- * Carga y renderizado de solicitudes pendientes
- */
 async function loadPendingRequests() {
     await updateFinishedRequests();
 
@@ -90,14 +82,10 @@ async function loadPendingRequests() {
     }
 }
 
-// Escuchar cambios de autenticación para cargar datos
 onAuthStateChanged(auth, (user) => {
     if (user) loadPendingRequests();
 });
 
-/**
- * Delegación de eventos para Aceptar/Rechazar
- */
 document.addEventListener("click", async (e) => {
     if (e.target.classList.contains("aprobar") || e.target.classList.contains("rechazar")) {
         const id = e.target.dataset.id;
@@ -122,7 +110,7 @@ document.addEventListener("click", async (e) => {
 
             await updateDoc(requestRef, { state: newState, reminderSent: false });
 
-            // Envío de correo mediante EmailJS
+        
             await emailjs.send("service_r39dndx", "template_xja6qwb", {
                 name: data.name,
                 state: newState,
@@ -140,9 +128,6 @@ document.addEventListener("click", async (e) => {
     }
 });
 
-/**
- * Modal para agendar evento rápido (Gestor)
- */
 btnAdd.addEventListener('click', async () => {
     const { value: formValues } = await Swal.fire({
         title: 'Agendar Evento',
