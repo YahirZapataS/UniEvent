@@ -1,25 +1,26 @@
 import { db, auth } from './services/firebaseConfig.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { collection, getDocs, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { populatePlacesSelect } from './modules/utils.js';
 
-// Referencias a elementos
 const historyFilterForm = document.getElementById('historyFilterForm');
 const historyTableBody = document.getElementById('historyTableBody');
 const historyMessage = document.getElementById('historyMessage');
 const btnClearFilters = document.getElementById('btnClearFilters');
 const btnPrintReport = document.getElementById('btnPrintReport');
+const placeSelect = document.getElementById('place');
 
 document.addEventListener('DOMContentLoaded', () => {
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
         if (!user) {
             window.location.href = 'index.html';
         } else {
-            loadHistory(true); // Carga inicial sin filtros
+            await populatePlacesSelect(placeSelect, "Todos los lugares");
+            loadHistory(true);
         }
     });
 });
 
-// Eventos
 historyFilterForm.addEventListener('submit', (e) => {
     e.preventDefault();
     loadHistory(false);
@@ -43,7 +44,7 @@ async function loadHistory(clearFilters = false) {
 
         if (!clearFilters) {
             const state = document.getElementById('filterState').value;
-            const place = document.getElementById('place').value;
+            const place = placeSelect.value;
             const dateFrom = document.getElementById('filterDateFrom').value;
             const dateTo = document.getElementById('filterDateTo').value;
 
@@ -53,7 +54,6 @@ async function loadHistory(clearFilters = false) {
             if (dateTo) filters.push(where('date', '<=', dateTo));
         }
 
-        // Ordenamiento (Requiere índice compuesto en Firebase si usas múltiples filtros)
         const q = query(requestsRef, ...filters, orderBy('date', 'desc'));
         const snapshot = await getDocs(q);
 
@@ -67,7 +67,6 @@ async function loadHistory(clearFilters = false) {
         snapshot.forEach(docSnap => {
             const data = docSnap.data();
             const row = historyTableBody.insertRow();
-            // Usamos las clases de estado de dashboard.css para el color
             const stateClass = `status-${data.state.toLowerCase()}`;
 
             row.innerHTML = `
@@ -87,7 +86,6 @@ async function loadHistory(clearFilters = false) {
     }
 }
 
-// Lógica de impresión PDF simplificada
 async function printReport() {
     const table = document.getElementById('historyTable');
     if (historyTableBody.rows.length === 0) {

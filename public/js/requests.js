@@ -1,6 +1,6 @@
 import { db } from './services/firebaseConfig.js';
-import { collection, addDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { toMinutes, minutesToTimeStr } from './modules/utils.js';
+import { collection, addDoc, query, where, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { toMinutes, minutesToTimeStr, populatePlacesSelect } from './modules/utils.js';
 
 const EMAILJS_SERVICE_ID_NEW = "service_r39dndx";
 const EMAILJS_TEMPLATE_ID_NEW = "template_547yaif";
@@ -94,7 +94,7 @@ async function updateAvailableStartTimes() {
         let optionsHtml = '<option value="">Hora Inicio</option>';
         for (let time = START_LIMIT; time < END_LIMIT; time += STEP) {
             const isOccupied = occupied.some(slot => time >= slot.start && time < slot.end);
-            
+
             if (!isOccupied) {
                 let limitForThisSlot = END_LIMIT;
                 occupied.forEach(slot => {
@@ -144,7 +144,8 @@ async function updateAvailableEndTimes() {
     endTimeInput.innerHTML = optionsHtml;
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    await populatePlacesSelect(placeInput, "Seleccione el lugar");
     flatpickr(dateInput, {
         dateFormat: "Y-m-d",
         minDate: "today",
@@ -208,6 +209,8 @@ form.addEventListener("submit", async (e) => {
 });
 
 if (btnHelp) {
+    const adminConfig = await getAdminConfig();
+    const adminEmail = adminConfig.ADMIN_EMAIL;
     btnHelp.addEventListener('click', () => {
         Swal.fire({
             title: '<span style="color: #2563eb; font-weight: 800; font-size: 1.6rem;">Manual de Reservación</span>',
@@ -224,7 +227,7 @@ if (btnHelp) {
                             Panel del Solicitante
                         </div>
                         <div style="padding: 15px; font-size: 0.9rem; background: #f8fafc;">
-                            Ingresa tu <b>Grado Académico</b>, nombre y cargo. El correo institucional es obligatorio para recibir la respuesta oficial de tu solicitud.
+                            Ingresa tus datos para solicitar el espacio. El correo institucional es obligatorio para recibir la respuesta oficial de tu solicitud.
                         </div>
                     </div>
 
@@ -244,8 +247,8 @@ if (btnHelp) {
                         <div style="padding: 15px; font-size: 0.9rem; background: #f8fafc;">
                             <p style="margin-bottom: 10px;"><b>Selecciona primero el Lugar</b>. El calendario se iluminará con colores según la ocupación actual:</p>
                             <div style="display: flex; gap: 15px; font-weight: 600;">
-                                <span style="color: #22c55e;">● Verde: Libre</span>
-                                <span style="color: #eab308;">● Amarillo: Medio</span>
+                                <span style="color: #22c55e;">● Verde: Libre o mucha disponibilidad</span>
+                                <span style="color: #eab308;">● Amarillo: Disponibilidad media</span>
                                 <span style="color: #ef4444;">● Rojo: Saturado</span>
                             </div>
                         </div>
@@ -257,6 +260,7 @@ if (btnHelp) {
                             <li>Duración mínima del evento: 1 hora.</li>
                             <li>Horarios permitidos: 08:00 AM a 08:00 PM.</li>
                             <li>Días de atención: Lunes a Viernes.</li>
+                            <p>Si necesitas un espacio en fin de semana, favor de contactar a ${adminEmail} </p>
                         </ul>
                     </div>
                 </div>

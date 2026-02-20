@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.8/dist/sweetalert2.min.css">
   <link rel="stylesheet" href="../css/dashboard.css">
 </head>
+
 <body>
   <div class="dashboard-container">
     <aside class="sidebar">
@@ -68,6 +70,33 @@
             </div>
           </div>
         </section>
+        <section class="config-card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <h3>Gestión de Espacios Académicos</h3>
+          </div>
+          <div class="card-body">
+            <p>Agrega, activa, desactiva o elimina los lugares disponibles para reservación.</p>
+
+            <div class="input-group" style="flex-direction: row; gap: 1rem; margin-bottom: 1.5rem;">
+              <input type="text" id="newPlaceName" placeholder="Ej. Laboratorio de Redes" style="flex-grow: 1;">
+              <button type="button" id="btnAddPlace" class="btn-save" style="padding: 0.75rem 1.5rem;">Agregar</button>
+            </div>
+
+            <div class="table-scrollable">
+              <table>
+                <thead>
+                  <tr>
+                    <th class="text-left">Nombre del Espacio</th>
+                    <th class="text-center">Estado</th>
+                    <th class="text-right">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="placesTableBody">
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
 
         <div class="form-actions">
           <button type="submit" id="saveConfigBtn" class="btn-save">Guardar Cambios</button>
@@ -80,4 +109,5 @@
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <script type="module" src="../js/dashboard-configuration.js"></script>
 </body>
+
 </html>

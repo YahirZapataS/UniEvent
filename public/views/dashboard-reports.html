@@ -7,11 +7,11 @@
     <title>Reportes - UniEvent</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/dashboard.css">
-    
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.8/dist/sweetalert2.all.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    
+
     <script type="module" src="../js/components/MainSidebar.js"></script>
     <script type="module" src="../js/reports.js"></script>
 </head>
@@ -36,7 +36,8 @@
             <section class="config-card" style="margin-bottom: 2rem;">
                 <div class="card-header">Filtros de Búsqueda</div>
                 <div class="card-body">
-                    <form id="historyFilterForm" class="filter-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    <form id="historyFilterForm" class="filter-grid"
+                        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
                         <div class="input-group">
                             <label>Estado</label>
                             <select id="filterState">
@@ -51,9 +52,7 @@
                             <label>Lugar</label>
                             <select id="place">
                                 <option value="">Todos los lugares</option>
-                                <option value="Auditorio">Auditorio Principal</option>
-                                <option value="Aula 1">Aula 1</option>
-                                </select>
+                            </select>
                         </div>
                         <div class="input-group">
                             <label>Desde</label>
@@ -63,7 +62,7 @@
                             <label>Hasta</label>
                             <input type="date" id="filterDateTo">
                         </div>
-                        
+
                         <div style="grid-column: 1 / -1; display: flex; gap: 1rem; margin-top: 1rem;">
                             <button type="submit" class="btn-save">Aplicar Filtros</button>
                             <button type="button" id="btnClearFilters" class="btn-print">Limpiar Filtros</button>
@@ -86,7 +85,7 @@
                         </tr>
                     </thead>
                     <tbody id="historyTableBody">
-                        </tbody>
+                    </tbody>
                 </table>
                 <div id="historyMessage" class="empty-row">Cargando historial...</div>
             </section>

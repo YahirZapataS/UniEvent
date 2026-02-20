@@ -448,6 +448,125 @@ td {
     outline: none;
 }
 
+/* --- Botones de Acción para Tablas --- */
+.btn-action {
+    padding: 0.4rem 0.8rem;
+    border-radius: 0.4rem;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Botón Desactivar (Rojo claro) */
+.btn-toggle-active {
+    background-color: #fef2f2;
+    color: #ef4444;
+    border: 1px solid #fca5a5;
+}
+.btn-toggle-active:hover {
+    background-color: #fee2e2;
+}
+
+/* Botón Activar (Azul claro) */
+.btn-toggle-inactive {
+    background-color: #eff6ff;
+    color: #2563eb;
+    border: 1px solid #bfdbfe;
+}
+.btn-toggle-inactive:hover {
+    background-color: #dbeafe;
+}
+
+/* Botón Eliminar (Gris que se vuelve rojo al pasar el mouse) */
+.btn-outline-danger {
+    background-color: #ffffff;
+    color: #64748b;
+    border: 1px solid #e2e8f0;
+}
+.btn-outline-danger:hover {
+    background-color: #fee2e2;
+    color: #ef4444;
+    border-color: #fca5a5;
+}
+
+/* Botón Editar (Gris que se vuelve azul al pasar el mouse) */
+.btn-outline-edit {
+    background-color: #ffffff;
+    color: #64748b;
+    border: 1px solid #e2e8f0;
+}
+.btn-outline-edit:hover {
+    background-color: #eff6ff;
+    color: #2563eb;
+    border-color: #bfdbfe;
+}
+
+.btn-soft-primary {
+    background-color: #eff6ff; /* Fondo azul muy claro */
+    color: #2563eb;            /* Texto azul fuerte */
+    border: 1px solid #bfdbfe; /* Borde azul sutil */
+}
+
+.btn-soft-primary:hover {
+    background-color: #dbeafe; /* Un poco más oscuro al pasar el mouse */
+    border-color: #93c5fd;
+}
+
+.btn-soft-danger {
+    background-color: #fef2f2; /* Fondo rojo muy claro */
+    color: #ef4444;            /* Texto rojo fuerte */
+    border: 1px solid #fca5a5; /* Borde rojo sutil */
+}
+
+.btn-soft-danger:hover {
+    background-color: #fee2e2; /* Un poco más oscuro al pasar el mouse */
+    border-color: #f87171;
+}
+
+/* --- Tabla con Scroll Interno (Configuración) --- */
+.table-scrollable {
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    max-height: 350px; /* Altura máxima antes de hacer scroll */
+    overflow-y: auto;
+    background-color: var(--white);
+    margin-bottom: 1rem;
+}
+
+.table-scrollable table {
+    width: 100%;
+    border-collapse: collapse;
+    position: relative;
+}
+
+/* Encabezado fijo (Sticky Header) */
+.table-scrollable thead th {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: #f8fafc;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02); /* Sombra suave para resaltar que flota */
+}
+
+/* Celdas de la tabla */
+.table-scrollable tbody td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border);
+    background-color: var(--white);
+}
+
+/* Utilidades de alineación */
+.text-left { text-align: left; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.flex-end-gap { display: flex; justify-content: flex-end; gap: 0.5rem; }
+
 /* Responsive */
 @media (max-width: 1024px) {
     .sidebar {
