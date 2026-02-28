@@ -61,6 +61,8 @@ async function loadPendingRequests() {
         snapshot.forEach((docSnap) => {
             const data = docSnap.data();
             const row = document.createElement("tr");
+            
+            // CORRECCIÓN AQUÍ: Quitamos los onclick y usamos clases (aprobar/rechazar) y data-id
             row.innerHTML = `
                 <td>${data.name}</td>
                 <td>${data.activityType}</td>
@@ -71,10 +73,10 @@ async function loadPendingRequests() {
                 <td>${data.endTime}</td>
                 <td>${data.place}</td>
                 <td class="flex-end-gap">
-                    <button type="button" class="btn-action btn-soft-success" onclick="acceptRequest('${doc.id}')" title="Aceptar solicitud">
+                    <button type="button" class="btn-action btn-soft-success aprobar" data-id="${docSnap.id}" title="Aceptar solicitud">
                         Aceptar
                     </button>
-                    <button type="button" class="btn-action btn-soft-danger" onclick="rejectRequest('${doc.id}')" title="Rechazar solicitud">
+                    <button type="button" class="btn-action btn-soft-danger rechazar" data-id="${docSnap.id}" title="Rechazar solicitud">
                         Rechazar
                     </button>
                 </td>
@@ -90,6 +92,7 @@ onAuthStateChanged(auth, (user) => {
     if (user) loadPendingRequests();
 });
 
+// Lógica de los botones controlada por Event Delegation
 document.addEventListener("click", async (e) => {
     if (e.target.classList.contains("aprobar") || e.target.classList.contains("rechazar")) {
         const id = e.target.dataset.id;
@@ -113,7 +116,6 @@ document.addEventListener("click", async (e) => {
             const data = requestSnap.data();
 
             await updateDoc(requestRef, { state: newState, reminderSent: false });
-
 
             await emailjs.send("service_r39dndx", "template_xja6qwb", {
                 name: data.name,
