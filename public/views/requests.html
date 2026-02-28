@@ -77,40 +77,55 @@
                                 <option value="">Seleccione el lugar</option>
                             </select>
                         </div>
+
                         <div class="input-group">
-                            <label for="date">Fecha</label>
-                            <input type="text" id="date" placeholder="Selecciona fecha" readonly required>
-                        </div>
-                        <div class="time-grid">
-                            <div class="input-group">
-                                <label for="startTime">Inicio</label>
-                                <select id="startTime" required>
-                                    <option value="">Hora Inicio</option>
-                                </select>
+                            <div
+                                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                                <label for="date" style="margin: 0;">Fecha(s) del evento</label>
+                                <label class="switch-custom" title="Permite seleccionar varios días en el calendario">
+                                    <input type="checkbox" id="toggleMultipleDates">
+                                    <span class="slider round"></span>
+                                    <span class="switch-label-text">Múltiples fechas</span>
+                                </label>
                             </div>
-                            <div class="input-group">
-                                <label for="endTime">Fin</label>
-                                <select id="endTime" required>
-                                    <option value="">Hora Fin</option>
-                                </select>
+                            <input type="text" id="date" placeholder="Selecciona la(s) fecha(s)" required readonly>
+                            <span class="time-helper-text">Si activas "Múltiples fechas", puedes hacer clic en varios
+                                días.</span>
+                        </div>
+
+                        <div class="input-group">
+                            <div
+                                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                                <label style="margin: 0;">Horarios</label>
+                                <button type="button" id="btnAddTimeSlot" class="btn-ghost-small">+ Añadir
+                                    horario</button>
+                            </div>
+
+                            <div id="timeSlotsContainer">
+                                <div class="time-grid time-slot-row">
+                                    <select class="startTime" required>
+                                        <option value="">Hora Inicio</option>
+                                    </select>
+                                    <select class="endTime" required>
+                                        <option value="">Hora Fin</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
+                    </section>
                 </div>
-                <div class="input-group expand">
+                <div class="input-group expand" style="margin-top: 1.5rem;">
                     <label for="comments">Comentarios (Opcional)</label>
                     <textarea id="comments" placeholder="Notas adicionales..."></textarea>
                 </div>
-                </section>
-        </div>
 
-        <div class="form-footer">
-            <button type="button" id="btnBack" class="btn-secondary">Regresar</button>
-            <button type="submit" class="btn-primary">Enviar Solicitud</button>
+                <div class="form-footer">
+                    <button type="button" id="btnBack" class="btn-secondary">Regresar</button>
+                    <button type="submit" class="btn-primary">Enviar Solicitud</button>
+                </div>
+            </form>
         </div>
-        </form>
-        <button id="btnHelp" class="fab-help" title="Guía de uso">i</button>
-    </div>
-    </div>
+    </div> <button id="btnHelp" class="fab-help" title="Guía de uso">i</button>
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>

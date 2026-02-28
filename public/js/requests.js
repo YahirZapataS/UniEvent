@@ -8,11 +8,15 @@ const EMAILJS_TEMPLATE_ID_NEW = "template_547yaif";
 const form = document.getElementById("formSolicitud");
 const placeInput = document.getElementById("place");
 const dateInput = document.getElementById("date");
-const startTimeInput = document.getElementById("startTime");
-const endTimeInput = document.getElementById("endTime");
 const btnHelp = document.getElementById('btnHelp');
 
+// Elementos para lógica de múltiples fechas y horarios
+const toggleMultipleDates = document.getElementById('toggleMultipleDates');
+const btnAddTimeSlot = document.getElementById('btnAddTimeSlot');
+const timeSlotsContainer = document.getElementById('timeSlotsContainer');
+
 const availabilityCache = new Map();
+let calendarInstance = null;
 
 async function getAdminConfig() {
     const docRef = doc(db, 'config', 'adminSettings');
@@ -23,6 +27,7 @@ async function getAdminConfig() {
     return { ADMIN_EMAIL: "admin_default@uv.mx" };
 }
 
+// 1. Precarga los colores de disponibilidad del mes consultado
 async function preloadMonthAvailability(dateObj, place) {
     if (!place) {
         availabilityCache.clear();
@@ -38,6 +43,7 @@ async function preloadMonthAvailability(dateObj, place) {
         availabilityCache.clear();
         const daysInMonth = new Date(year, month + 1, 0).getDate();
 
+        // Asignamos Verde (Libre) por defecto a los días válidos a futuro
         for (let i = 1; i <= daysInMonth; i++) {
             const currentLoopDate = new Date(year, month, i);
             const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
@@ -47,6 +53,7 @@ async function preloadMonthAvailability(dateObj, place) {
             }
         }
 
+        // Consultamos las solicitudes existentes de ese mes
         const q = query(requestsRef, where("place", "==", place), where("state", "in", ["Pendiente", "Aceptada"]));
         const snapshot = await getDocs(q);
         const monthCounts = new Map();
@@ -59,6 +66,7 @@ async function preloadMonthAvailability(dateObj, place) {
             }
         });
 
+        // Aplicamos la lógica de colores (Amarillo: Medio, Rojo: Saturado)
         monthCounts.forEach((count, dateString) => {
             const key = `${dateString}-${place}`;
             if (availabilityCache.has(key)) {
@@ -73,18 +81,86 @@ async function preloadMonthAvailability(dateObj, place) {
     }
 }
 
-async function updateAvailableStartTimes() {
-    const date = dateInput.value;
-    const place = placeInput.value;
-    if (!date || !place) return;
+// 2. Inicializador del Calendario Flatpickr
+function initCalendar(mode) {
+    if (calendarInstance) {
+        calendarInstance.destroy();
+    }
+    dateInput.value = '';
 
-    startTimeInput.innerHTML = '<option value="">Cargando...</option>';
-    endTimeInput.innerHTML = '<option value="">Hora Fin</option>';
+    calendarInstance = flatpickr(dateInput, {
+        mode: mode,
+        dateFormat: "Y-m-d",
+        minDate: "today",
+        locale: "es",
+        disable: [date => (date.getDay() === 0 || date.getDay() === 6)],
+        // Pinta los días al crearlos
+        onDayCreate: (dObj, dStr, fp, dayElem) => {
+            const dateString = fp.formatDate(dayElem.dateObj, "Y-m-d");
+            const color = availabilityCache.get(`${dateString}-${placeInput.value}`);
+            if (color) dayElem.classList.add(`availability-${color}`);
+        },
+        // Mantiene los colores al cambiar de mes
+        onMonthChange: async (selectedDates, dateStr, instance) => {
+            const currentMonth = new Date(instance.currentYear, instance.currentMonth, 1);
+            await preloadMonthAvailability(currentMonth, placeInput.value);
+            instance.redraw();
+        },
+        onYearChange: async (selectedDates, dateStr, instance) => {
+            const currentMonth = new Date(instance.currentYear, instance.currentMonth, 1);
+            await preloadMonthAvailability(currentMonth, placeInput.value);
+            instance.redraw();
+        },
+        onChange: () => updateAllTimeSlots()
+    });
+}
+
+// 3. Funciones de ayuda para obtener ocupación de MÚLTIPLES fechas a la vez
+async function getOccupiedTimesForSelectedDates(place, dates) {
+    let occupied = [];
+    for (const date of dates) {
+        const q = query(
+            collection(db, "solicitudes"),
+            where("date", "==", date),
+            where("place", "==", place),
+            where("state", "in", ["Pendiente", "Aceptada"])
+        );
+        const snapshot = await getDocs(q);
+        snapshot.docs.forEach(doc => {
+            occupied.push({ start: toMinutes(doc.data().startTime), end: toMinutes(doc.data().endTime) });
+        });
+    }
+    return occupied;
+}
+
+async function updateAllTimeSlots() {
+    const startSelects = document.querySelectorAll('.startTime');
+    for (const select of startSelects) {
+        await updateAvailableStartTimes(select);
+        const endElem = select.closest('.time-slot-row').querySelector('.endTime');
+        if (endElem) endElem.innerHTML = '<option value="">Hora Fin</option>';
+    }
+}
+
+async function updateAvailableStartTimes(specificStartSelect = null) {
+    const startElem = specificStartSelect || document.querySelector('.startTime');
+    if (!startElem) return;
+
+    const dates = dateInput.value.split(', ').filter(d => d.trim() !== '');
+    const place = placeInput.value;
+    const endElem = startElem.closest('.time-slot-row').querySelector('.endTime');
+
+    if (dates.length === 0 || !place) {
+        startElem.innerHTML = '<option value="">Hora Inicio</option>';
+        if (endElem) endElem.innerHTML = '<option value="">Hora Fin</option>';
+        return;
+    }
+
+    startElem.innerHTML = '<option value="">Cargando...</option>';
+    if (endElem) endElem.innerHTML = '<option value="">Hora Fin</option>';
 
     try {
-        const q = query(collection(db, "solicitudes"), where("date", "==", date), where("place", "==", place), where("state", "in", ["Pendiente", "Aceptada"]));
-        const snapshot = await getDocs(q);
-        let occupied = snapshot.docs.map(doc => ({ start: toMinutes(doc.data().startTime), end: toMinutes(doc.data().endTime) }));
+        const occupied = await getOccupiedTimesForSelectedDates(place, dates);
 
         const START_LIMIT = 480;
         const END_LIMIT = 1200;
@@ -108,26 +184,25 @@ async function updateAvailableStartTimes() {
                 }
             }
         }
-        startTimeInput.innerHTML = optionsHtml;
+        startElem.innerHTML = optionsHtml;
     } catch (error) { console.error(error); }
 }
 
-async function updateAvailableEndTimes() {
-    const startTimeStr = startTimeInput.value;
+async function updateAvailableEndTimes(startSelect, endSelect) {
+    const startTimeStr = startSelect.value;
     if (!startTimeStr) {
-        endTimeInput.innerHTML = '<option value="">Hora Fin</option>';
+        endSelect.innerHTML = '<option value="">Hora Fin</option>';
         return;
     }
+
     const startMinutes = toMinutes(startTimeStr);
-    const date = dateInput.value;
+    const dates = dateInput.value.split(', ').filter(d => d.trim() !== '');
     const place = placeInput.value;
     const STEP = 30;
     const MIN_DURATION = 60;
     const END_LIMIT = 1200;
 
-    const q = query(collection(db, "solicitudes"), where("date", "==", date), where("place", "==", place), where("state", "in", ["Pendiente", "Aceptada"]));
-    const snapshot = await getDocs(q);
-    let occupied = snapshot.docs.map(doc => ({ start: toMinutes(doc.data().startTime), end: toMinutes(doc.data().endTime) }));
+    const occupied = await getOccupiedTimesForSelectedDates(place, dates);
 
     let limitForEnd = END_LIMIT;
     occupied.forEach(slot => {
@@ -141,73 +216,128 @@ async function updateAvailableEndTimes() {
         const timeStr = minutesToTimeStr(time);
         optionsHtml += `<option value="${timeStr}">${timeStr}</option>`;
     }
-    endTimeInput.innerHTML = optionsHtml;
+    endSelect.innerHTML = optionsHtml;
 }
 
+// 4. Inicialización y Listeners
 document.addEventListener('DOMContentLoaded', async () => {
     await populatePlacesSelect(placeInput, "Seleccione el lugar");
-    flatpickr(dateInput, {
-        dateFormat: "Y-m-d",
-        minDate: "today",
-        locale: "es",
-        disable: [date => (date.getDay() === 0 || date.getDay() === 6)],
-        onDayCreate: (dObj, dStr, fp, dayElem) => {
-            const dateString = fp.formatDate(dayElem.dateObj, "Y-m-d");
-            const color = availabilityCache.get(`${dateString}-${placeInput.value}`);
-            if (color) dayElem.classList.add(`availability-${color}`);
-        },
-        onChange: () => updateAvailableStartTimes()
-    });
+    initCalendar("single");
+
+    const initialStart = document.querySelector('.startTime');
+    const initialEnd = document.querySelector('.endTime');
+    if (initialStart && initialEnd) {
+        initialStart.addEventListener('change', () => updateAvailableEndTimes(initialStart, initialEnd));
+    }
 });
 
 placeInput.addEventListener('change', async () => {
     availabilityCache.clear();
     if (placeInput.value) {
-        await preloadMonthAvailability(new Date(), placeInput.value);
-        if (dateInput._flatpickr) dateInput._flatpickr.redraw();
+        const currentMonth = calendarInstance ? new Date(calendarInstance.currentYear, calendarInstance.currentMonth, 1) : new Date();
+        await preloadMonthAvailability(currentMonth, placeInput.value);
+        if (calendarInstance) calendarInstance.redraw();
+        updateAllTimeSlots();
     }
 });
 
-startTimeInput.addEventListener('change', updateAvailableEndTimes);
+toggleMultipleDates?.addEventListener('change', (e) => {
+    initCalendar(e.target.checked ? "multiple" : "single");
+});
 
+btnAddTimeSlot?.addEventListener('click', () => {
+    const row = document.createElement('div');
+    row.className = 'time-grid time-slot-row';
+    row.style.gridTemplateColumns = '1fr 1fr 40px';
+
+    row.innerHTML = `
+        <select class="startTime" required><option value="">Hora Inicio</option></select>
+        <select class="endTime" required><option value="">Hora Fin</option></select>
+        <button type="button" class="btn-remove-slot" title="Quitar horario">X</button>
+    `;
+
+    timeSlotsContainer.appendChild(row);
+
+    const startSelect = row.querySelector('.startTime');
+    const endSelect = row.querySelector('.endTime');
+
+    startSelect.addEventListener('change', () => updateAvailableEndTimes(startSelect, endSelect));
+
+    row.querySelector('.btn-remove-slot').addEventListener('click', () => {
+        row.remove();
+        updateAllTimeSlots();
+    });
+
+    updateAvailableStartTimes(startSelect);
+});
+
+// 5. Envío dividido de Formulario
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    Swal.fire({ title: 'Enviando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
 
-    const formData = {
-        name: document.getElementById("name").value,
-        activityType: document.getElementById("activityType").value,
-        activityName: document.getElementById("activityName").value,
-        description: document.getElementById("description").value,
-        place: placeInput.value,
-        date: dateInput.value,
-        startTime: startTimeInput.value,
-        endTime: endTimeInput.value,
-        email: document.getElementById("email").value,
-        comments: document.getElementById("comments").value || "",
-        state: "Pendiente",
-        registerDate: new Date(),
-        reminderSent: false
-    };
+    const fechasSeleccionadas = dateInput.value.split(', ').filter(d => d.trim() !== '');
+    const timeRows = document.querySelectorAll('.time-slot-row');
+    const horarios = Array.from(timeRows).map(row => ({
+        start: row.querySelector('.startTime').value,
+        end: row.querySelector('.endTime').value
+    })).filter(h => h.start && h.end);
+
+    if (fechasSeleccionadas.length === 0 || horarios.length === 0) {
+        Swal.fire('Atención', 'Debes seleccionar al menos una fecha y un horario válido.', 'warning');
+        return;
+    }
+
+    Swal.fire({ title: 'Procesando reservaciones...', text: 'Generando solicitudes', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
 
     try {
         const adminConfig = await getAdminConfig();
-        await addDoc(collection(db, "solicitudes"), formData);
+        const baseData = {
+            name: document.getElementById("name").value,
+            activityType: document.getElementById("activityType").value,
+            activityName: document.getElementById("activityName").value,
+            description: document.getElementById("description").value,
+            place: placeInput.value,
+            email: document.getElementById("email").value,
+            comments: document.getElementById("comments").value || "",
+            state: "Pendiente",
+            registerDate: new Date(),
+            reminderSent: false
+        };
+
+        const promesas = [];
+
+        fechasSeleccionadas.forEach(fecha => {
+            horarios.forEach(horario => {
+                const formData = {
+                    ...baseData,
+                    date: fecha,
+                    startTime: horario.start,
+                    endTime: horario.end
+                };
+                promesas.push(addDoc(collection(db, "solicitudes"), formData));
+            });
+        });
+
+        await Promise.all(promesas);
+
         await emailjs.send(EMAILJS_SERVICE_ID_NEW, EMAILJS_TEMPLATE_ID_NEW, {
             to_email: adminConfig.ADMIN_EMAIL,
-            responsible_name: `${formData.name}`,
-            activity_title: formData.activityName,
-            request_date: formData.date,
-            request_time: `${formData.startTime} - ${formData.endTime}`,
-            request_place: formData.place,
-            applicant_email: formData.email
+            responsible_name: baseData.name,
+            activity_title: baseData.activityName,
+            request_date: fechasSeleccionadas.length > 1 ? "Múltiples (Ver panel)" : fechasSeleccionadas[0],
+            request_time: horarios.length > 1 ? "Múltiples (Ver panel)" : `${horarios[0].start} - ${horarios[0].end}`,
+            request_place: baseData.place,
+            applicant_email: baseData.email
         });
-        Swal.fire('¡Enviado!', 'Su solicitud ha sido registrada.', 'success').then(() => window.location.href = "index.html");
+
+        Swal.fire('¡Enviado!', `Se han registrado ${promesas.length} solicitud(es) exitosamente.`, 'success').then(() => window.location.href = "index.html");
     } catch (error) {
         Swal.fire('Error', 'Hubo un problema al procesar.', 'error');
+        console.error(error);
     }
 });
 
+// 6. Modal de Ayuda
 if (btnHelp) {
     const adminConfig = await getAdminConfig();
     const adminEmail = adminConfig.ADMIN_EMAIL;
@@ -247,8 +377,8 @@ if (btnHelp) {
                         <div style="padding: 15px; font-size: 0.9rem; background: #f8fafc;">
                             <p style="margin-bottom: 10px;"><b>Selecciona primero el Lugar</b>. El calendario se iluminará con colores según la ocupación actual:</p>
                             <div style="display: flex; gap: 15px; font-weight: 600;">
-                                <span style="color: #22c55e;">● Verde: Libre o mucha disponibilidad</span>
-                                <span style="color: #eab308;">● Amarillo: Disponibilidad media</span>
+                                <span style="color: #22c55e;">● Verde: Libre</span>
+                                <span style="color: #eab308;">● Amarillo: Medio</span>
                                 <span style="color: #ef4444;">● Rojo: Saturado</span>
                             </div>
                         </div>
@@ -260,7 +390,7 @@ if (btnHelp) {
                             <li>Duración mínima del evento: 1 hora.</li>
                             <li>Horarios permitidos: 08:00 AM a 08:00 PM.</li>
                             <li>Días de atención: Lunes a Viernes.</li>
-                            <p>Si necesitas un espacio en fin de semana, favor de contactar a ${adminEmail} </p>
+                            <p>Si necesitas un espacio en fin de semana, favor de contactar a <a href="mailto:${adminEmail}" style="color: #2563eb;">${adminEmail}</a></p>
                         </ul>
                     </div>
                 </div>
