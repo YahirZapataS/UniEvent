@@ -174,7 +174,7 @@ main-sidebar {
 table {
     width: 100%;
     border-collapse: collapse;
-    min-width: 800px; 
+    min-width: 800px;
 }
 
 th {
@@ -423,6 +423,21 @@ td {
     width: 100%;
 }
 
+/* Botón Verde Suave (Para Aceptar) */
+.btn-soft-success {
+    background-color: #dcfce7;
+    /* Fondo verde muy claro */
+    color: #166534;
+    /* Texto verde fuerte */
+    border: 1px solid #bbf7d0;
+    /* Borde verde sutil */
+}
+
+.btn-soft-success:hover {
+    background-color: #bbf7d0;
+    border-color: #86efac;
+}
+
 .password-wrapper input {
     padding-right: 45px;
     width: 100%;
@@ -470,6 +485,7 @@ td {
     color: #ef4444;
     border: 1px solid #fca5a5;
 }
+
 .btn-toggle-active:hover {
     background-color: #fee2e2;
 }
@@ -480,6 +496,7 @@ td {
     color: #2563eb;
     border: 1px solid #bfdbfe;
 }
+
 .btn-toggle-inactive:hover {
     background-color: #dbeafe;
 }
@@ -490,6 +507,7 @@ td {
     color: #64748b;
     border: 1px solid #e2e8f0;
 }
+
 .btn-outline-danger:hover {
     background-color: #fee2e2;
     color: #ef4444;
@@ -502,6 +520,7 @@ td {
     color: #64748b;
     border: 1px solid #e2e8f0;
 }
+
 .btn-outline-edit:hover {
     background-color: #eff6ff;
     color: #2563eb;
@@ -509,24 +528,32 @@ td {
 }
 
 .btn-soft-primary {
-    background-color: #eff6ff; /* Fondo azul muy claro */
-    color: #2563eb;            /* Texto azul fuerte */
-    border: 1px solid #bfdbfe; /* Borde azul sutil */
+    background-color: #eff6ff;
+    /* Fondo azul muy claro */
+    color: #2563eb;
+    /* Texto azul fuerte */
+    border: 1px solid #bfdbfe;
+    /* Borde azul sutil */
 }
 
 .btn-soft-primary:hover {
-    background-color: #dbeafe; /* Un poco más oscuro al pasar el mouse */
+    background-color: #dbeafe;
+    /* Un poco más oscuro al pasar el mouse */
     border-color: #93c5fd;
 }
 
 .btn-soft-danger {
-    background-color: #fef2f2; /* Fondo rojo muy claro */
-    color: #ef4444;            /* Texto rojo fuerte */
-    border: 1px solid #fca5a5; /* Borde rojo sutil */
+    background-color: #fef2f2;
+    /* Fondo rojo muy claro */
+    color: #ef4444;
+    /* Texto rojo fuerte */
+    border: 1px solid #fca5a5;
+    /* Borde rojo sutil */
 }
 
 .btn-soft-danger:hover {
-    background-color: #fee2e2; /* Un poco más oscuro al pasar el mouse */
+    background-color: #fee2e2;
+    /* Un poco más oscuro al pasar el mouse */
     border-color: #f87171;
 }
 
@@ -534,7 +561,8 @@ td {
 .table-scrollable {
     border: 1px solid var(--border);
     border-radius: 0.5rem;
-    max-height: 350px; /* Altura máxima antes de hacer scroll */
+    max-height: 350px;
+    /* Altura máxima antes de hacer scroll */
     overflow-y: auto;
     background-color: var(--white);
     margin-bottom: 1rem;
@@ -554,7 +582,8 @@ td {
     background-color: #f8fafc;
     padding: 1rem;
     border-bottom: 1px solid var(--border);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.02); /* Sombra suave para resaltar que flota */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    /* Sombra suave para resaltar que flota */
 }
 
 /* Celdas de la tabla */
@@ -565,15 +594,29 @@ td {
 }
 
 /* Utilidades de alineación */
-.text-left { text-align: left; }
-.text-center { text-align: center; }
-.text-right { text-align: right; }
-.flex-end-gap { display: flex; justify-content: flex-end; gap: 0.5rem; }
+.text-left {
+    text-align: left;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.flex-end-gap {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
 
 /* --- Responsividad Móvil y App Navigation --- */
 @media (max-width: 900px) {
     .dashboard-container {
-        display: block; /* Quitamos flexbox para que el contenido suba a su lugar */
+        display: block;
+        /* Quitamos flexbox para que el contenido suba a su lugar */
     }
 
     main-sidebar {
@@ -584,9 +627,11 @@ td {
 
     .main-content {
         padding: 1.2rem;
-        padding-bottom: 90px; /* Vital para que el menú inferior no tape los datos */
+        padding-bottom: 90px;
+        /* Vital para que el menú inferior no tape los datos */
         height: 100vh;
-        overflow-y: auto; /* Mantiene el scroll interno */
+        overflow-y: auto;
+        /* Mantiene el scroll interno */
     }
 
     /* 1. Transformamos el Sidebar en un Bottom Nav fijo */
@@ -606,7 +651,8 @@ td {
     }
 
     /* Ocultamos el logo y la línea separadora */
-    .brand, .separator {
+    .brand,
+    .separator {
         display: none;
     }
 
@@ -621,16 +667,19 @@ td {
         display: flex;
         flex-direction: row;
         height: 100%;
-        overflow-x: auto; /* Habilita el deslizamiento táctil */
+        overflow-x: auto;
+        /* Habilita el deslizamiento táctil */
         -webkit-overflow-scrolling: touch;
         align-items: center;
         padding: 0 1rem;
         gap: 0.5rem;
-        scrollbar-width: none; /* Oculta barra en Firefox */
+        scrollbar-width: none;
+        /* Oculta barra en Firefox */
     }
-    
+
     .sidebar ul::-webkit-scrollbar {
-        display: none; /* Oculta barra en Chrome/Safari */
+        display: none;
+        /* Oculta barra en Chrome/Safari */
     }
 
     .sidebar li {
@@ -681,16 +730,19 @@ td {
         margin-bottom: 1.5rem;
     }
 
-    .title-area h1 { font-size: 1.4rem; }
+    .title-area h1 {
+        font-size: 1.4rem;
+    }
 
-    .actions-area, .btn-print {
+    .actions-area,
+    .btn-print {
         width: 100%;
         justify-content: center;
     }
 
     /* Subimos el botón flotante (+) para que no choque con el menú inferior */
     .fab {
-        bottom: 85px; 
+        bottom: 85px;
         right: 1.2rem;
         width: 50px;
         height: 50px;
@@ -698,5 +750,7 @@ td {
     }
 
     /* Unificamos columnas del modal de Firebase */
-    .swal-form-grid { grid-template-columns: 1fr; }
+    .swal-form-grid {
+        grid-template-columns: 1fr;
+    }
 }

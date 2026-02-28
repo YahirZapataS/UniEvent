@@ -70,9 +70,13 @@ async function loadPendingRequests() {
                 <td>${data.startTime}</td>
                 <td>${data.endTime}</td>
                 <td>${data.place}</td>
-                <td class="actions">
-                    <button data-id="${docSnap.id}" class="aprobar">Aceptar</button>
-                    <button data-id="${docSnap.id}" class="rechazar">Rechazar</button>
+                <td class="flex-end-gap">
+                    <button type="button" class="btn-action btn-soft-success" onclick="acceptRequest('${doc.id}')" title="Aceptar solicitud">
+                        Aceptar
+                    </button>
+                    <button type="button" class="btn-action btn-soft-danger" onclick="rejectRequest('${doc.id}')" title="Rechazar solicitud">
+                        Rechazar
+                    </button>
                 </td>
             `;
             table.appendChild(row);
@@ -110,7 +114,7 @@ document.addEventListener("click", async (e) => {
 
             await updateDoc(requestRef, { state: newState, reminderSent: false });
 
-        
+
             await emailjs.send("service_r39dndx", "template_xja6qwb", {
                 name: data.name,
                 state: newState,
